@@ -15,6 +15,9 @@ import ForgotPassword from "../views/ForgotPassword"
 import SendForgotPasswordSuccess from "../views/SendForgotPasswordSuccess";
 import SetNewPassword from "../views/SetNewPassword";
 import SetForgotPasswordSuccess from "../views/SetForgotPasswordSuccess";
+import SignUp from "../views/SignUp";
+import SendEmailVerificationSuccess from "@/views/SendEmailVerificationSuccess";
+import VerifyEmailSuccess from "@/views/VerifyEmailSuccess";
 
 const routes = [
   {
@@ -83,6 +86,21 @@ const routes = [
         path: "/setNewPassWord",
         name: "setNewPassWord",
         components: { default: SetNewPassword },
+      },
+      {
+        path: "/signUp",
+        name: "signUp",
+        components: { default: SignUp },
+      },
+      {
+        path: "/sendEmailVerificationSuccess",
+        name: "sendEmailVerificationSuccess",
+        components: { default: SendEmailVerificationSuccess },
+      },
+      {
+        path: "/verifyEmailSuccess",
+        name: "verifyEmailSuccess",
+        components: { default: VerifyEmailSuccess },
       },
     ],
   },
