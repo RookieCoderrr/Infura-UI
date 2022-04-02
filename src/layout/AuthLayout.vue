@@ -1,6 +1,6 @@
 <template>
-  <div class="" >
-    <div class="na" style="background-color: white; height: 60px">
+  <div class=""  style="width: 100%; height: 100%; position: absolute; background-color: #2dce89" :style="{backgroundImage:'url(' +bg2 +')'}">
+    <div class="na" style="background-color: rgba(255,255,255,0.4); height: 60px">
       <div class="na-left" style="height: 60px; width: 100px;float:left; margin-left: 60px;display:flex; align-items:center; justify-content:center;">
           <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1392 371" enable-background="new 0 0 1392 371" xml:space="preserve">  <image id="image0" width="1392" height="371" x="0" y="0"
                                                                                                                                                                                                                                   xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABXAAAAFzCAYAAACXVCETAAABdGlDQ1BpY2MAACiRdZHLS0JBFIc/
@@ -734,12 +734,14 @@ LjGFZP48AAAAAElFTkSuQmCC" />
   </div>
 </template>
 <script>
+import Bg2 from '@/assets/background2.svg'
 export default {
   name: "auth-layout",
   data() {
     return {
       year: new Date().getFullYear(),
       showMenu: false,
+      bg2: Bg2,
     };
   },
 };
