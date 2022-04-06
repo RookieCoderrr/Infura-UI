@@ -1,76 +1,64 @@
 <template>
-  <div>
-    <base-header type="gradient-success" class="pb-6 pb-8 pt-5 pt-md-8">
-      <div class="row">
-        <div class="col-xl-3 col-lg-6">
-          <stats-card
-            title="Total traffic"
-            type="gradient-red"
-            sub-title="350,897"
-            icon="ni ni-active-40"
-            class="mb-4 mb-xl-0"
-          >
-            <template v-slot:footer>
-              <span class="text-success mr-2">
-                <i class="fa fa-arrow-up"></i> 3.48%
-              </span>
-              <span class="text-nowrap">Since last month</span>
-            </template>
-          </stats-card>
-        </div>
-        <div class="col-xl-3 col-lg-6">
-          <stats-card
-            title="Total traffic"
-            type="gradient-orange"
-            sub-title="2,356"
-            icon="ni ni-chart-pie-35"
-            class="mb-4 mb-xl-0"
-          >
-            <template v-slot:footer>
-              <span class="text-success mr-2">
-                <i class="fa fa-arrow-up"></i> 12.18%
-              </span>
-              <span class="text-nowrap">Since last month</span>
-            </template>
-          </stats-card>
-        </div>
-        <div class="col-xl-3 col-lg-6">
-          <stats-card
-            title="Sales"
-            type="gradient-green"
-            sub-title="924"
-            icon="ni ni-money-coins"
-            class="mb-4 mb-xl-0"
-          >
-            <template v-slot:footer>
-              <span class="text-danger mr-2">
-                <i class="fa fa-arrow-down"></i> 5.72%
-              </span>
-              <span class="text-nowrap">Since last month</span>
-            </template>
-          </stats-card>
-        </div>
-        <div class="col-xl-3 col-lg-6">
-          <stats-card
-            title="Performance"
-            type="gradient-info"
-            sub-title="49,65%"
-            icon="ni ni-chart-bar-32"
-            class="mb-4 mb-xl-0"
-          >
-            <template v-slot:footer>
-              <span class="text-success mr-2">
-                <i class="fa fa-arrow-up"></i> 54.8%
-              </span>
-              <span class="text-nowrap">Since last month</span>
-            </template>
-          </stats-card>
-        </div>
-      </div>
-    </base-header>
+  <div class="na" style=" height: 60px">
+    <div class="na-left" style="height: 60px; width: 50px;float:left;display:flex; align-items:center; justify-content:center;">
+      <img src="@/assets/shortLogo.svg">
+    </div>
+    <div class="" style="height: 60px; float:left; margin-left: 0px;display:flex; align-items:center;font-family: 'PingFang SC';font-style: normal;font-weight: 500;font-size: 14px;color: #1D2129" >
+      Dashboard
+    </div>
+  </div>
+  <div style="margin:0;padding:0; width:100%;height:1px;background-color:whitesmoke;overflow:hidden;"></div>
+  <div class="" style=" height: 40px">
+    <div class="na-left" style="height: 40px; width: 20%;float:left; ;display:flex; align-items:center; justify-content:center ">
+      <el-dropdown>
+        <el-button size="small" class="menuButton" style="background-color: white;color: #4D56E1;border-radius: 2px;font-weight: 400">
+          Mainnet<i class="el-icon--right el-icon-arrow-down"></i>
+        </el-button>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item>Mainnet</el-dropdown-item>
+            <el-dropdown-item>Testnet</el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
+      <div class="mr-2"></div>
+      <el-dropdown>
+        <el-button size="small" class="menuButton" style="background-color: white;color: #4D56E1;border-radius: 2px;font-weight: 40">
+          All projects<i class="el-icon--right el-icon-arrow-down"></i>
+        </el-button>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item>A</el-dropdown-item>
+            <el-dropdown-item>B</el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
+    </div>
+    <div  class="na-mid ml-4" style="height: 40px; width: 50%;float:left;display:flex; align-items:center;font-family: 'PingFang SC';font-style: normal;font-weight: 500;font-size: 14px;color: #1D2129" >
+      <el-button-group class="ml-4">
+        <el-button size="small" style="background-color: white;color: #4D56E1;border-radius: 2px;font-weight: 40">7 days</el-button>
+        <el-button size="small" style="background-color: white;color: #4D56E1;border-radius: 2px;font-weight: 40">30 days</el-button>
+      </el-button-group>
+      <div class="ml-3"></div>
+      <el-date-picker
+          size="small"
+          v-model="value2"
+          type="daterange"
+          start-placeholder="Start Date"
+          end-placeholder="End Date"
+          :default-value="[new Date(2010, 9, 1), new Date(2010, 10, 1)]"
+      />
+    </div>
+    <div  class="na-right mr-0 " style="height: 40px; width: 20%;display:flex; align-items:center; margin: 0 auto ;justify-content:center;">
+      <el-button size="small" style="background-color: white;border-radius: 2px;font-weight: 40"><i class="el-icon-setting" ></i>Project Settings</el-button>
+    </div>
 
-    <div class="container-fluid mt--7">
+  </div>
+  <div class="container-fluid" >
       <!--Charts-->
+      <div class="row mt-3" style="font-weight: 600;font-size: 24px;font-family: 'PingFang SC';font-style: normal;color: #1D2129">
+        Requests Volume
+      </div>
       <div class="row">
         <div class="col-xl-8 mb-5 mb-xl-0">
           <card type="default" header-classes="bg-transparent">
@@ -114,52 +102,51 @@
           </card>
         </div>
 
-        <div class="col-xl-4">
-          <card header-classes="bg-transparent">
-            <template v-slot:header>
-              <div class="row align-items-center">
-                <div class="col">
-                  <h6 class="text-uppercase text-muted ls-1 mb-1">
-                    Performance
-                  </h6>
-                  <h5 class="h3 mb-0">Total orders</h5>
-                </div>
-              </div>
-            </template>
-            <div class="chart-area">
-              <canvas :height="350" :id="ordersChartID"></canvas>
-            </div>
-          </card>
-        </div>
+<!--        <div class="col-xl-4">-->
+<!--          <card header-classes="bg-transparent">-->
+<!--            <template v-slot:header>-->
+<!--              <div class="row align-items-center">-->
+<!--                <div class="col">-->
+<!--                  <h6 class="text-uppercase text-muted ls-1 mb-1">-->
+<!--                    Performance-->
+<!--                  </h6>-->
+<!--                  <h5 class="h3 mb-0">Total orders</h5>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </template>-->
+<!--            <div class="chart-area">-->
+<!--              <canvas :height="350" :id="ordersChartID"></canvas>-->
+<!--            </div>-->
+<!--          </card>-->
+<!--        </div>-->
       </div>
       <!-- End charts-->
 
       <!--Tables-->
-      <div class="row mt-5">
-        <div class="col-xl-8 mb-5 mb-xl-0">
-          <page-visits-table></page-visits-table>
-        </div>
-        <div class="col-xl-4">
-          <social-traffic-table></social-traffic-table>
-        </div>
-      </div>
+<!--      <div class="row mt-5">-->
+<!--        <div class="col-xl-8 mb-5 mb-xl-0">-->
+<!--          <page-visits-table></page-visits-table>-->
+<!--        </div>-->
+<!--        <div class="col-xl-4">-->
+<!--          <social-traffic-table></social-traffic-table>-->
+<!--        </div>-->
+<!--      </div>-->
       <!--End tables-->
     </div>
-  </div>
 </template>
 <script>
 // Charts
 import { ordersChart } from "@/components/Charts/Chart";
 import Chart from "chart.js";
-
-import PageVisitsTable from "./Dashboard/PageVisitsTable";
-import SocialTrafficTable from "./Dashboard/SocialTrafficTable";
+//
+// import PageVisitsTable from "./Dashboard/PageVisitsTable";
+// import SocialTrafficTable from "./Dashboard/SocialTrafficTable";
 let chart;
 
 export default {
   components: {
-    PageVisitsTable,
-    SocialTrafficTable,
+    // PageVisitsTable,
+    // SocialTrafficTable,
   },
   data() {
     return {
@@ -323,4 +310,8 @@ export default {
   },
 };
 </script>
-<style></style>
+<style>
+.menuButton{
+
+}
+</style>

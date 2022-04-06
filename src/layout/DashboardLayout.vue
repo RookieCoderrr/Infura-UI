@@ -59,28 +59,24 @@
       </template>
     </side-bar>
     <div class="main-content" :data="sidebarBackground">
-      <dashboard-navbar></dashboard-navbar>
-
-      <div @click="toggleSidebar">
+      <div >
         <!-- your content here -->
         <router-view></router-view>
-        <content-footer v-if="!$route.meta.hideFooter"></content-footer>
+<!--        <content-footer v-if="!$route.meta.hideFooter"></content-footer>-->
       </div>
     </div>
   </div>
 </template>
 <script>
-import DashboardNavbar from "./DashboardNavbar.vue";
-import ContentFooter from "./ContentFooter.vue";
+// import ContentFooter from "./ContentFooter.vue";
 
 export default {
   components: {
-    DashboardNavbar,
-    ContentFooter,
+    // ContentFooter,
   },
   data() {
     return {
-      sidebarBackground: "vue", //vue|blue|orange|green|red|primary
+      sidebarBackground: "", //vue|blue|orange|green|red|primary
     };
   },
   methods: {
