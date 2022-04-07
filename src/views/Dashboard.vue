@@ -10,47 +10,13 @@
   <div style="margin:0;padding:0; width:100%;height:1px;background-color:whitesmoke;overflow:hidden;"></div>
   <div class="" style=" height: 40px">
     <div class="na-left" style="height: 40px; width: 20%;float:left; ;display:flex; align-items:center; justify-content:center ">
-      <el-dropdown>
-        <el-button size="small" class="menuButton" style="background-color: white;color: #4D56E1;border-radius: 2px;font-weight: 400">
-          Mainnet<i class="el-icon--right el-icon-arrow-down"></i>
-        </el-button>
-        <template #dropdown>
-          <el-dropdown-menu>
-            <el-dropdown-item>Mainnet</el-dropdown-item>
-            <el-dropdown-item>Testnet</el-dropdown-item>
-          </el-dropdown-menu>
-        </template>
-      </el-dropdown>
-      <div class="mr-2"></div>
-      <el-dropdown>
-        <el-button size="small" class="menuButton" style="background-color: white;color: #4D56E1;border-radius: 2px;font-weight: 40">
-          All projects<i class="el-icon--right el-icon-arrow-down"></i>
-        </el-button>
-        <template #dropdown>
-          <el-dropdown-menu>
-            <el-dropdown-item>A</el-dropdown-item>
-            <el-dropdown-item>B</el-dropdown-item>
-          </el-dropdown-menu>
-        </template>
-      </el-dropdown>
+
     </div>
     <div  class="na-mid ml-4" style="height: 40px; width: 50%;float:left;display:flex; align-items:center;font-family: 'PingFang SC';font-style: normal;font-weight: 500;font-size: 14px;color: #1D2129" >
-      <el-button-group class="ml-4">
-        <el-button size="small" style="background-color: white;color: #4D56E1;border-radius: 2px;font-weight: 40">7 days</el-button>
-        <el-button size="small" style="background-color: white;color: #4D56E1;border-radius: 2px;font-weight: 40">30 days</el-button>
-      </el-button-group>
-      <div class="ml-3"></div>
-      <el-date-picker
-          size="small"
-          v-model="value2"
-          type="daterange"
-          start-placeholder="Start Date"
-          end-placeholder="End Date"
-          :default-value="[new Date(2010, 9, 1), new Date(2010, 10, 1)]"
-      />
+
     </div>
     <div  class="na-right mr-0 " style="height: 40px; width: 20%;display:flex; align-items:center; margin: 0 auto ;justify-content:center;">
-      <el-button size="small" style="background-color: white;border-radius: 2px;font-weight: 40"><i class="el-icon-setting" ></i>Project Settings</el-button>
+
     </div>
 
   </div>

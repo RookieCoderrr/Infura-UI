@@ -5,7 +5,7 @@ import AuthLayout from "@/layout/AuthLayout";
 
 import Dashboard from "../views/Dashboard.vue";
 import Icons from "../views/Icons.vue";
-import Maps from "../views/Maps.vue";
+import DashBoardv2 from "../views/DashBoardv2.vue";
 import Profile from "../views/UserProfile.vue";
 import Tables from "../views/Tables.vue";
 
@@ -18,6 +18,9 @@ import SetForgotPasswordSuccess from "../views/SetForgotPasswordSuccess";
 import SignUp from "../views/SignUp";
 import SendEmailVerificationSuccess from "@/views/SendEmailVerificationSuccess";
 import VerifyEmailSuccess from "@/views/VerifyEmailSuccess";
+import Management from "../views/Management";
+import Info from "@/views/Info";
+import Setting from "@/views/Setting";
 
 const routes = [
   {
@@ -36,9 +39,9 @@ const routes = [
         components: { default: Icons },
       },
       {
-        path: "/maps",
-        name: "maps",
-        components: { default: Maps },
+        path: "/dashboardv2",
+        name: "dashboardv2",
+        components: { default: DashBoardv2 },
       },
       {
         path: "/profile",
@@ -49,6 +52,21 @@ const routes = [
         path: "/tables",
         name: "tables",
         components: { default: Tables },
+      },
+      {
+        path: "/management",
+        name: "management",
+        components: { default: Management },
+      },
+      {
+        path: "/info",
+        name: "info",
+        components: { default: Info },
+      },
+      {
+        path: "/setting",
+        name: "setting",
+        components: { default: Setting },
       },
     ],
   },

@@ -58,7 +58,7 @@
         />
       </template>
     </side-bar>
-    <div class="main-content" :data="sidebarBackground">
+    <div class="main-content" >
       <div >
         <!-- your content here -->
         <router-view></router-view>

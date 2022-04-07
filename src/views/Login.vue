@@ -56,6 +56,16 @@
                 <small>Don't have an account?</small> <a href="#" ><small>Sign up now</small></a>
             </div>
           </form>
+          <base-dropdown>
+            <template v-slot:title>
+              <base-button type="secondary" class="dropdown-toggle">
+                Regular
+              </base-button>
+            </template>
+            <a class="dropdown-item" href="#">Action</a>
+            <a class="dropdown-item" href="#">Another action</a>
+            <a class="dropdown-item" href="#">Something else here</a>
+          </base-dropdown>
         </div>
       </div>
 
