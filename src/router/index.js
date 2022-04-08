@@ -21,11 +21,14 @@ import VerifyEmailSuccess from "@/views/VerifyEmailSuccess";
 import Management from "../views/Management";
 import Info from "@/views/Info";
 import Setting from "@/views/Setting";
+import Account from "@/views/account";
+import Bill from "@/views/bill";
+import Logout from "@/views/logout";
 
 const routes = [
   {
     path: "/",
-    redirect: "/dashboard",
+    redirect: "/dashboardv2",
     component: DashboardLayout,
     children: [
       {
@@ -67,6 +70,21 @@ const routes = [
         path: "/setting",
         name: "setting",
         components: { default: Setting },
+      },
+      {
+        path: "/account",
+        name: "account",
+        components: { default: Account },
+      },
+      {
+        path: "/bill",
+        name: "bill",
+        components: { default: Bill },
+      },
+      {
+        path: "/logout",
+        name: "logout",
+        components: { default: Logout },
       },
     ],
   },

@@ -8,8 +8,8 @@
         Dashboard
       </div>
     </div>
-    <div style="margin:0;padding:0; width:100%;height:2px;background-color:whitesmoke;overflow:hidden;"></div>
-    <div class="option mt-2" style="height: 45px;">
+    <div style="margin:0;padding:0; width:100%;height:1px;background-color:whitesmoke;overflow:hidden;"></div>
+    <div class="option" style="height: 45px;">
       <div class="left" style="height: 45px; width: 25%;;display: inline-block;text-align:center;justify-content: center;align-items: center">
         <el-dropdown >
           <el-button size="small" style="background-color: white;color:#4D56E1;border-radius: 2px;font-weight: 40 ;font-family:'PingFang SC';font-style: normal;font-size: 14px">
@@ -58,10 +58,7 @@
 
 
     <div class="container-fluid">
-      <div class="row mt-3 ml-2" style="font-weight: 600;font-size: 24px;font-family: 'PingFang SC';font-style: normal;color: #1D2129">
-        Requests Volume
-      </div>
-      <div class="row mt-2">
+      <div class="row">
         <div class="col">
           <div class="card shadow border-0">
             <div

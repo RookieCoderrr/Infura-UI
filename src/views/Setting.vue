@@ -80,29 +80,77 @@
       <div class=" mt-3 ml-1 pl-4 pt-3 card shadow border-0" style="background-color: rgba(255,255,255,0.5);box-shadow: 0px 5px 30px rgba(77, 86, 225, 0.0);border-radius: 5px;">
         <div style="">
           <div style="display: inline-block">
-            <el-button size="small" style="background-color: white;color: #4E5969;border-radius: 2px;font-weight: 400;font-family: 'PingFang SC';font-style: normal;font-size: 14px">Contract Address</el-button>
+            <el-button size="small" @click="changeTab('contract')"  style="background-color: white;color: #4E5969;border-radius: 2px;font-weight: 400;font-family: 'PingFang SC';font-style: normal;font-size: 14px">Contract Address</el-button>
           </div>
           <div style="display: inline-block">
-            <el-button size="small" style="background-color: white;color: #4E5969;border-radius: 2px;font-weight: 400;font-family: 'PingFang SC';font-style: normal;font-size: 14px">Origins</el-button>
+            <el-button size="small"  @click="changeTab('origin')" label="origin" style="background-color: white;color: #4E5969;border-radius: 2px;font-weight: 400;font-family: 'PingFang SC';font-style: normal;font-size: 14px">Origins</el-button>
           </div>
           <div style="display: inline-block">
-            <el-button size="small" style="background-color: white;color: #4E5969;border-radius: 2px;font-weight: 400;font-family: 'PingFang SC';font-style: normal;font-size: 14px">Api Request Method</el-button>
+            <el-button size="small" @click="changeTab('apiRequest')" style="background-color: white;color: #4E5969;border-radius: 2px;font-weight: 400;font-family: 'PingFang SC';font-style: normal;font-size: 14px">Api Request Method</el-button>
           </div>
 
         </div>
         <div class="mt-2 mb-2"   style="display: flex;align-items: center;">
-
-          <div class="" style="display: inline-block;width: 56%;">
+          <div v-if="this.showRecord==='apiRequest'" class="" style="display: inline-block;width: 56%;">
+            <el-select
+                v-model="value1"
+                multiple
+                placeholder="Select"
+                style="width: 100%"
+            >
+              <el-option
+                  v-for="item in options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+              />
+            </el-select>
+          </div>
+          <div v-else class="" style="display: inline-block;width: 56%;">
             <el-input v-model="input" placeholder="" clearable />
           </div>
           <div class="ml-2" style="display: inline-block;width: 44%;">
             <el-button style="background-color:#4D56E1;color: white ;width: 100px">Add</el-button>
           </div>
         </div>
-        <div>
+        <div v-if="this.showRecord==='contract'">
+          <div class="mt-2 mb-2" v-for="(param, ind) in contract"
+               :key="ind" style="display: flex;align-items: center;">
+            <div class="" style="display: inline-block; font-family: 'PingFang SC';font-style: normal;font-weight: 400;font-size: 14px;color:#4E5969 " >
+              {{ param }}
+            </div>
+            <div class="ml-4" style="display: inline-block;">
+              <el-button type="text" style="font-family: 'PingFang SC';font-style: normal;font-weight: 400;font-size: 14px;color:#4D56E1 ">Remove </el-button>
+            </div>
+
+          </div>
+        </div>
+        <div v-if="this.showRecord==='origin'">
+          <div class="mt-2 mb-2" v-for="(param, ind) in origins"
+               :key="ind" style="display: flex;align-items: center;">
+            <div class="" style="display: inline-block; font-family: 'PingFang SC';font-style: normal;font-weight: 400;font-size: 14px;color:#4E5969 " >
+              {{ param }}
+            </div>
+            <div class="ml-4" style="display: inline-block;">
+              <el-button type="text" style="font-family: 'PingFang SC';font-style: normal;font-weight: 400;font-size: 14px;color:#4D56E1 ">Remove </el-button>
+            </div>
+
+          </div>
 
         </div>
+        <div v-if="this.showRecord==='apiRequest'">
+          <div class="mt-2 mb-2" v-for="(param, ind) in apiRequest"
+               :key="ind" style="display: flex;align-items: center;">
+            <div class="" style="display: inline-block; font-family: 'PingFang SC';font-style: normal;font-weight: 400;font-size: 14px;color:#4E5969 " >
+              {{ param }}
+            </div>
+            <div class="ml-4" style="display: inline-block;">
+              <el-button type="text" style="font-family: 'PingFang SC';font-style: normal;font-weight: 400;font-size: 14px;color:#4D56E1 ">Remove </el-button>
+            </div>
 
+          </div>
+
+        </div>
       </div>
 
     </div>
@@ -115,7 +163,35 @@ export default {
   data() {
     return {
       nav: null,
+      contract:["0xhHHq1ouoHJHLJLJY8797hkhIUIHJ","0xd2a4cff31913016155e38e474a2c06d08be276cf","0xef4073a0f2b305a38ec4050e4d3d28bc40ea63f5"],
+      origins:["127.0.0.1","localhost"],
+      showRecord:"contract",
+      apiRequest:["getBlockCount","getBlockInfoByBlockHash","getCommittee","getAccount","getContractHash"],
+      value1:[],
+      options:[
+        {
+          value:'getBlockCount',
+          label:'getBlockCount'
+        },{
+          value:'getBlockInfoByBlockHash',
+          label:'getBlockInfoByBlockHash'
+        },{
+          value:'getCommittee',
+          label:'getCommittee'
+        },{
+          value:'getAccount',
+          label:'getAccount'
+        },{
+          value:'getContractHash',
+          label:'getContractHash'
+        }
+      ]
     };
+  },
+  methods:{
+    changeTab(value) {
+      this.showRecord = value
+    }
   },
   mounted() {
     loader.load().then(function (google) {
