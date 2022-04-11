@@ -46,26 +46,16 @@
                 <label  for="checkbox" style="margin-left: 10px; font-size: 14px ;color: #4E5969" >Remember me</label>
               </div>
               <div class="col-6">
-                <a href="#" style="float: right"><small>Forgot password?</small></a>
+                <router-link to="/forgotPassword" style="float: right;"><small>Forgot password?</small></router-link>
               </div>
             </div>
             <div class="text-center mt-5">
-              <base-button type="primary" class="my-4 " style="width: 99% ;height: 50px; background-color: #4D56E1">Login</base-button>
+              <button @click="login(model.email,model.password)" type="primary" class="my-4 " style="width: 99% ;height: 50px; background-color: #4D56E1;border-radius:5px;border: none;color: white;font-weight: 700;font-size: 16px;font-style: normal">Login</button>
             </div>
             <div class="text-center mt--3 mb-3">
                 <small>Don't have an account?</small> <a href="#" ><small>Sign up now</small></a>
             </div>
           </form>
-          <base-dropdown>
-            <template v-slot:title>
-              <base-button type="secondary" class="dropdown-toggle">
-                Regular
-              </base-button>
-            </template>
-            <a class="dropdown-item" href="#">Action</a>
-            <a class="dropdown-item" href="#">Another action</a>
-            <a class="dropdown-item" href="#">Something else here</a>
-          </base-dropdown>
         </div>
       </div>
 
@@ -73,6 +63,8 @@
   </div>
 </template>
 <script>
+import axios from 'axios'
+import {ElMessage} from 'element-plus'
 export default {
   name: "login",
   data() {
@@ -83,6 +75,67 @@ export default {
       },
     };
   },
+  methods: {
+    login(email,password) {
+      axios({
+        method: "post",
+        url: "/api/auth/email/login",
+        data: {
+          email: email,
+          password: password,
+        },
+        headers: {
+          "Content-Type": "application/json",
+          withCredentials: " true",
+          crossDomain: "true",
+        },
+      }).then((res) => {
+         console.log(res)
+         if (res['data']['success'] === true) {
+           this.$router.push({
+             path: `/info`,
+             params:{email:this.model.email}
+           });
+         } else if (res['data']['success'] === false && res['data']['data']['status'] === 403) {
+           ElMessage({
+             showClose: true,
+             type: 'error',
+             message: 'LOGIN.EMAIL_NOT_VERIFIED',
+           })
+         }else if (res['data']['success'] === false && res['data']['data']['status'] === 401) {
+           ElMessage({
+             showClose: true,
+             type: 'error',
+             message: 'LOGIN.PASSWORD_NOT_VALID',
+           })
+         } else if (res['data']['success'] === false && res['data']['data']['status'] === 404) {
+           ElMessage({
+             showClose: true,
+             type: 'error',
+             message: 'LOGIN.USER_NOT_FOUND',
+           })
+         } else {
+           ElMessage({
+             showClose: true,
+             type: 'error',
+             message: 'EMAIL NOT STANDARD',
+           })
+         }
+      }).catch(function (error) {
+        if (error.response && error.response.status === 400) {
+          ElMessage({
+            showClose: true,
+            type: 'error',
+            message: 'EMAIL NOT STANDARD',
+          })
+        } else if (error.request) {
+          console.log(error.request);
+        } else {
+          console.log('Error', error.message);
+        }
+      })
+    },
+  }
 };
 </script>
 <style></style>

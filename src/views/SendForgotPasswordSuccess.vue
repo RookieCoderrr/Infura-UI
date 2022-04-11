@@ -43,6 +43,9 @@
   </div>
 </template>
 <script>
+import axios from "axios";
+import {ElMessage} from "element-plus";
+
 export default {
   name: "login",
   data() {
@@ -53,6 +56,59 @@ export default {
       },
     };
   },
+  methods:{
+    sendForgotPassword(email) {
+      axios({
+        method: "get",
+        url: "http://127.0.0.1:3000/auth/email/forgot-password/"+email,
+        headers: {
+          "Content-Type": "application/json",
+          withCredentials: " true",
+          crossDomain: "true",
+        },
+      }).then((res) => {
+        console.log(email)
+        console.log(res)
+        if (res['data']['success'] === true) {
+          ElMessage({
+            showClose: true,
+            type: 'success',
+            message: 'LOGIN.EMAIL_RESENT',
+          })
+        } else if (res['data']['success'] === false && res['data']['data']['status'] === 500) {
+          ElMessage({
+            showClose: true,
+            type: 'error',
+            message: 'RESET_PASSWORD.EMAIL_SENDED_RECENTLY',
+          })
+        }else if (res['data']['success'] === false && res['data']['data']['status'] === 404) {
+          ElMessage({
+            showClose: true,
+            type: 'error',
+            message: 'LOGIN.USER_NOT_FOUND',
+          })
+        } else {
+          ElMessage({
+            showClose: true,
+            type: 'error',
+            message: 'ERROR',
+          })
+        }
+      }).catch(function (error) {
+        if (error.response && error.response.status === 400) {
+          ElMessage({
+            showClose: true,
+            type: 'error',
+            message: 'EMAIL NOT STANDARD OR PASSWORD NOT STANDARD',
+          })
+        } else if (error.request) {
+          console.log(error.request);
+        } else {
+          console.log('Error', error.message);
+        }
+      })
+    },
+  }
 };
 </script>
 <style></style>

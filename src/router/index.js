@@ -119,7 +119,7 @@ const routes = [
         components: { default: SetForgotPasswordSuccess },
       },
       {
-        path: "/setNewPassWord",
+        path: "/setNewPassWord/:email/:token",
         name: "setNewPassWord",
         components: { default: SetNewPassword },
       },
@@ -134,7 +134,7 @@ const routes = [
         components: { default: SendEmailVerificationSuccess },
       },
       {
-        path: "/verifyEmailSuccess",
+        path: "/verifyEmailSuccess/:token",
         name: "verifyEmailSuccess",
         components: { default: VerifyEmailSuccess },
       },

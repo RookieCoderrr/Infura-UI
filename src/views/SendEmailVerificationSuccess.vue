@@ -24,9 +24,9 @@
             <span style="align-items: flex-start; color: #86909C; size: 14px">
               A verification email was sent to
             </span>
-            <span style="align-items: flex-start; color: #86909C; size: 14px">
-              123456789asdf@gmail.com
-            </span>
+            <div style="align-items: flex-start; color: #86909C; size: 14px">
+              {{this.email}}
+            </div>
             <div class="mt-3 mb-3" style="text-align: center" >
               <img src="@/assets/email.png" style="width: 100px;height: 100px">
             </div>
@@ -37,7 +37,7 @@
           <div class="mt-2"></div>
           <form role="form" style=" margin-left: 20px; margin-right: 24px">
             <div class="text-center mt-4">
-              <base-button type="primary" class="my-4 " style="width: 98% ;height: 50px; background-color: #4D56E1">Resend</base-button>
+              <button @click="reSend(this.email)" type="primary" class="my-4 " style="width: 99% ;height: 50px; background-color: #4D56E1;border-radius:5px;border: none;color: white;font-weight: 700;font-size: 16px;font-style: normal">Resend</button>
             </div>
 
           </form>
@@ -48,16 +48,70 @@
   </div>
 </template>
 <script>
+import axios from "axios";
+import {ElMessage} from "element-plus";
+
 export default {
   name: "login",
   data() {
     return {
-      model: {
-        email: "",
-        password: "",
-      },
+      email:''
     };
   },
+  created() {
+    this.getRouterData()
+  },
+  methods: {
+    getRouterData() {
+      this.email = this.$route.params.email
+      console.log('email', this.email)
+    },
+    reSend(email) {
+      axios({
+        method: "get",
+        url: "http://127.0.0.1:3000/auth/email/resend-verification/register/"+email,
+        headers: {
+          "Content-Type": "application/json",
+          withCredentials: " true",
+          crossDomain: "true",
+        },
+      }).then((res) => {
+        console.log(email)
+        console.log(res)
+        if (res['data']['success'] === true) {
+          ElMessage({
+            showClose: true,
+            type: 'success',
+            message: 'LOGIN.EMAIL_RESENT',
+          })
+        } else if (res['data']['success'] === false && res['data']['data']['status'] === 500) {
+          ElMessage({
+            showClose: true,
+            type: 'error',
+            message: 'LOGIN.EMAIL_SENDED_RECENTLY',
+          })
+        } else {
+          ElMessage({
+            showClose: true,
+            type: 'error',
+            message: 'ERROR',
+          })
+        }
+      }).catch(function (error) {
+        if (error.response && error.response.status === 400) {
+          ElMessage({
+            showClose: true,
+            type: 'error',
+            message: 'EMAIL NOT STANDARD OR PASSWORD NOT STANDARD',
+          })
+        } else if (error.request) {
+          console.log(error.request);
+        } else {
+          console.log('Error', error.message);
+        }
+      })
+    },
+  }
 };
 </script>
 <style></style>
