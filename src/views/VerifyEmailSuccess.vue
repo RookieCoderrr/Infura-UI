@@ -33,7 +33,7 @@
           <div class="mt-2"></div>
           <form role="form" style=" margin-left: 20px; margin-right: 24px">
             <div class="text-center mt-4">
-              <base-button type="primary" class="my-4 " style="width: 99% ;height: 50px; background-color: #4D56E1">Get start</base-button>
+              <button @click.prevent="toLogin()" type="primary" class="my-4 " style="width: 99% ;height: 50px; background-color: #4D56E1;border-radius:5px;border: none;color: white;font-weight: 700;font-size: 16px;font-style: normal">Get Start</button>
             </div>
 
           </form>
@@ -57,7 +57,7 @@
           <div class="mt-2"></div>
           <form role="form" style=" margin-left: 20px; margin-right: 24px">
             <div class="text-center mt-4">
-              <button @click="toLogin()" type="primary" class="my-4 " style="width: 99% ;height: 50px; background-color: #4D56E1;border-radius:5px;border: none;color: white;font-weight: 700;font-size: 16px;font-style: normal">Get Start</button>
+              <button @click.prevent="toLogin()" type="primary" class="my-4 " style="width: 99% ;height: 50px; background-color: #4D56E1;border-radius:5px;border: none;color: white;font-weight: 700;font-size: 16px;font-style: normal">Get Start</button>
             </div>
 
           </form>

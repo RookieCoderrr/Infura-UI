@@ -37,7 +37,7 @@
           <div class="mt-2"></div>
           <form role="form" style=" margin-left: 20px; margin-right: 24px">
             <div class="text-center mt-4">
-              <button @click="reSend(this.email)" type="primary" class="my-4 " style="width: 99% ;height: 50px; background-color: #4D56E1;border-radius:5px;border: none;color: white;font-weight: 700;font-size: 16px;font-style: normal">Resend</button>
+              <button @click.prevent="reSend(this.email)" type="primary" class="my-4 " style="width: 99% ;height: 50px; background-color: #4D56E1;border-radius:5px;border: none;color: white;font-weight: 700;font-size: 16px;font-style: normal">Resend</button>
             </div>
 
           </form>

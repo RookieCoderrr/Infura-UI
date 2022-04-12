@@ -30,7 +30,7 @@
             >
             </base-input>
             <div class="text-center mt-4">
-              <button @click="sendForgotPassword(this.model.email)" type="primary" class="my-4 " style="width: 99% ;height: 50px; background-color: #4D56E1;border-radius:5px;border: none;color: white;font-weight: 700;font-size: 16px;font-style: normal">Reset Password</button>
+              <button @click.prevent="sendForgotPassword(this.model.email)" type="primary" class="my-4 " style="width: 99% ;height: 50px; background-color: #4D56E1;border-radius:5px;border: none;color: white;font-weight: 700;font-size: 16px;font-style: normal">Reset Password</button>
             </div>
 
           </form>

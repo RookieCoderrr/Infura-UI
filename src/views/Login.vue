@@ -50,10 +50,10 @@
               </div>
             </div>
             <div class="text-center mt-5">
-              <button @click="login(model.email,model.password)" type="primary" class="my-4 " style="width: 99% ;height: 50px; background-color: #4D56E1;border-radius:5px;border: none;color: white;font-weight: 700;font-size: 16px;font-style: normal">Login</button>
+              <button @click.prevent="login(model.email,model.password)" type="primary" class="my-4 " style="width: 99% ;height: 50px; background-color: #4D56E1;border-radius:5px;border: none;color: white;font-weight: 700;font-size: 16px;font-style: normal">Login</button>
             </div>
             <div class="text-center mt--3 mb-3">
-                <small>Don't have an account?</small> <a href="#" ><small>Sign up now</small></a>
+                <small>Don't have an account?</small> <router-link to="/signup" ><small>Sign up now</small></router-link>
             </div>
           </form>
         </div>
@@ -65,6 +65,7 @@
 <script>
 import axios from 'axios'
 import {ElMessage} from 'element-plus'
+let Base64 = require('js-base64').Base64
 export default {
   name: "login",
   data() {
@@ -73,10 +74,28 @@ export default {
         email: "",
         password: "",
       },
+      checked:false,
     };
   },
+  mounted() {
+    let username = localStorage.getItem("email");
+    if (username) {
+      this.model.email = localStorage.getItem("email");
+      this.model.password = Base64.decode(localStorage.getItem("password"));// base64解密
+      this.checked = true;
+    }
+  },
+
   methods: {
     login(email,password) {
+      if (this.checked) {
+        let passwordCode = Base64.encode(this.model.password); // base64加密
+        localStorage.setItem("email", this.model.email);
+        localStorage.setItem("password", passwordCode);
+      } else {
+        localStorage.removeItem("email");
+        localStorage.removeItem("password");
+      }
       axios({
         method: "post",
         url: "/api/auth/email/login",
@@ -92,9 +111,12 @@ export default {
       }).then((res) => {
          console.log(res)
          if (res['data']['success'] === true) {
+           let token = res['data']['data']['token']['access_token']
+           let email = res['data']['data']['user']['email']
+           localStorage.setItem("token",token)
+           localStorage.setItem("email",email)
            this.$router.push({
-             path: `/info`,
-             params:{email:this.model.email}
+             path: `/management`,
            });
          } else if (res['data']['success'] === false && res['data']['data']['status'] === 403) {
            ElMessage({
@@ -118,7 +140,7 @@ export default {
            ElMessage({
              showClose: true,
              type: 'error',
-             message: 'EMAIL NOT STANDARD',
+             message: 'EMAIL NOT STANDARD OR PASSWORD NOT STANDARD',
            })
          }
       }).catch(function (error) {

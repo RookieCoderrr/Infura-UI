@@ -41,7 +41,7 @@
             </base-input>
 
             <div class="text-center mt-3">
-              <button @click="signUp(model.email,model.password)" type="primary" class="my-4 " style="width: 99% ;height: 50px; background-color: #4D56E1;border-radius:5px;border: none;color: white;font-weight: 700;font-size: 16px;font-style: normal">Sign Up</button>
+              <button @click.prevent="signUp(model.email,model.password)" type="primary" class="my-4 " style="width: 99% ;height: 50px; background-color: #4D56E1;border-radius:5px;border: none;color: white;font-weight: 700;font-size: 16px;font-style: normal">Sign Up</button>
             </div>
           </form>
         </div>
@@ -68,7 +68,7 @@ export default {
     signUp(email,password) {
       axios({
         method: "post",
-        url: "/api/auth/email/register",
+        url: "http://127.0.0.1:3000/auth/email/register",
         data: {
           email: email,
           password: password,
@@ -93,6 +93,12 @@ export default {
             showClose: true,
             type: 'error',
             message: 'REGISTRATION.USER_ALREADY_REGISTERED',
+          })
+        } else if (res['data']['success'] === false && res['data']['data']['status'] === 500) {
+          ElMessage({
+            showClose: true,
+            type: 'error',
+            message: 'LOGIN.EMAIL_SENDED_RECENTLY',
           })
         } else {
           ElMessage({

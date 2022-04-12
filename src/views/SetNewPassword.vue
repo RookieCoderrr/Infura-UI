@@ -43,7 +43,7 @@
             </base-input>
 
             <div class="text-center mt-5">
-              <button @click="resetPassword(this.$route.params.email,this.model.newPassWord,this.$route.params.token)" type="primary" class="my-4 " style="width: 99% ;height: 50px; background-color: #4D56E1;border-radius:5px;border: none;color: white;font-weight: 700;font-size: 16px;font-style: normal">Reset Password</button>
+              <button @click.prevent="resetPassword(this.$route.params.email,this.model.newPassWord,this.$route.params.token)" type="primary" class="my-4 " style="width: 99% ;height: 50px; background-color: #4D56E1;border-radius:5px;border: none;color: white;font-weight: 700;font-size: 16px;font-style: normal">Reset Password</button>
             </div>
 
           </form>
@@ -69,7 +69,7 @@
           <div class="mt-2"></div>
           <form role="form" style=" margin-left: 20px; margin-right: 24px">
             <div class="text-center mt-4">
-              <button @click="toLogin" type="primary" class="my-4 " style="width: 99% ;height: 50px; background-color: #4D56E1;border-radius:5px;border: none;color: white;font-weight: 700;font-size: 16px;font-style: normal">Get Start</button>
+              <button @click.prevent="toLogin" type="primary" class="my-4 " style="width: 99% ;height: 50px; background-color: #4D56E1;border-radius:5px;border: none;color: white;font-weight: 700;font-size: 16px;font-style: normal">Get Start</button>
             </div>
 
           </form>
@@ -178,7 +178,7 @@ export default {
             message: 'RESET_PASSWORD.PASSWORD_CHANGED',
           })
           this.$router.push({
-            path: `login`,
+            path: `/login`,
           });
         } else if (res['data']['success'] === false) {
           ElMessage({

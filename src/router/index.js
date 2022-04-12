@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory } from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 
 import DashboardLayout from "@/layout/DashboardLayout";
 import AuthLayout from "@/layout/AuthLayout";
@@ -26,6 +26,58 @@ import Bill from "@/views/bill";
 import Logout from "@/views/logout";
 
 const routes = [
+  {
+    path: "/",
+    redirect: "login",
+    component: AuthLayout,
+    children: [
+      {
+        path: "/login",
+        name: "login",
+        components: { default: Login },
+      },
+      {
+        path: "/register",
+        name: "register",
+        components: { default: Register },
+      },
+      {
+        path: "/forgotPassword",
+        name: "forgotPassword",
+        components: { default: ForgotPassword },
+      },
+      {
+        path: "/sendForgotPasswordSuccess",
+        name: "sendForgotPasswordSuccess",
+        components: { default: SendForgotPasswordSuccess },
+      },
+      {
+        path: "/setForgotPasswordSuccess",
+        name: "setForgotPasswordSuccess",
+        components: { default: SetForgotPasswordSuccess },
+      },
+      {
+        path: "/setNewPassWord/:email/:token",
+        name: "setNewPassWord",
+        components: { default: SetNewPassword },
+      },
+      {
+        path: "/signUp",
+        name: "signUp",
+        components: { default: SignUp },
+      },
+      {
+        path: "/sendEmailVerificationSuccess",
+        name: "sendEmailVerificationSuccess",
+        components: { default: SendEmailVerificationSuccess },
+      },
+      {
+        path: "/verifyEmailSuccess/:token",
+        name: "verifyEmailSuccess",
+        components: { default: VerifyEmailSuccess },
+      },
+    ],
+  },
   {
     path: "/",
     redirect: "/dashboardv2",
@@ -88,64 +140,27 @@ const routes = [
       },
     ],
   },
-  {
-    path: "/",
-    redirect: "login",
-    component: AuthLayout,
-    children: [
-      {
-        path: "/login",
-        name: "login",
-        components: { default: Login },
-      },
-      {
-        path: "/register",
-        name: "register",
-        components: { default: Register },
-      },
-      {
-        path: "/forgotPassword",
-        name: "forgotPassword",
-        components: { default: ForgotPassword },
-      },
-      {
-        path: "/sendForgotPasswordSuccess",
-        name: "sendForgotPasswordSuccess",
-        components: { default: SendForgotPasswordSuccess },
-      },
-      {
-        path: "/setForgotPasswordSuccess",
-        name: "setForgotPasswordSuccess",
-        components: { default: SetForgotPasswordSuccess },
-      },
-      {
-        path: "/setNewPassWord/:email/:token",
-        name: "setNewPassWord",
-        components: { default: SetNewPassword },
-      },
-      {
-        path: "/signUp",
-        name: "signUp",
-        components: { default: SignUp },
-      },
-      {
-        path: "/sendEmailVerificationSuccess",
-        name: "sendEmailVerificationSuccess",
-        components: { default: SendEmailVerificationSuccess },
-      },
-      {
-        path: "/verifyEmailSuccess/:token",
-        name: "verifyEmailSuccess",
-        components: { default: VerifyEmailSuccess },
-      },
-    ],
-  },
+
 ];
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  mode: 'history',
+  history: createWebHistory(process.env.BASE_URL),
   linkActiveClass: "active",
   routes,
 });
+// router.beforeEach((to,from,next) =>{
+//   //验证token,只有存在token的时候，才能跳转到内容页
+//   console.log(to);
+//   console.log(from);
+//   let token = localStorage.getItem("token");
+//   //console.log(token);
+//   if(token || to.path === '/login' || to.path === '/signUp' || to.path === '/login' || to.path === '/forgotPassword'){
+//     next();
+//     console.log(token);
+//   }else{
+//     next("/login");
+//   }
+// })
 
 export default router;

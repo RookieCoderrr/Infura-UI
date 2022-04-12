@@ -80,13 +80,13 @@
       <div class=" mt-3 ml-1 pl-4 pt-3 card shadow border-0" style="background-color: rgba(255,255,255,0.5);box-shadow: 0px 5px 30px rgba(77, 86, 225, 0.0);border-radius: 5px;">
         <div style="">
           <div style="display: inline-block">
-            <el-button size="small" @click="changeTab('contract')"  style="background-color: white;color: #4E5969;border-radius: 2px;font-weight: 400;font-family: 'PingFang SC';font-style: normal;font-size: 14px">Contract Address</el-button>
+            <el-button size="small" @click.prevent="changeTab('contract')"  style="background-color: white;color: #4E5969;border-radius: 2px;font-weight: 400;font-family: 'PingFang SC';font-style: normal;font-size: 14px">Contract Address</el-button>
           </div>
           <div style="display: inline-block">
-            <el-button size="small"  @click="changeTab('origin')" label="origin" style="background-color: white;color: #4E5969;border-radius: 2px;font-weight: 400;font-family: 'PingFang SC';font-style: normal;font-size: 14px">Origins</el-button>
+            <el-button size="small"  @click.prevent="changeTab('origin')" label="origin" style="background-color: white;color: #4E5969;border-radius: 2px;font-weight: 400;font-family: 'PingFang SC';font-style: normal;font-size: 14px">Origins</el-button>
           </div>
           <div style="display: inline-block">
-            <el-button size="small" @click="changeTab('apiRequest')" style="background-color: white;color: #4E5969;border-radius: 2px;font-weight: 400;font-family: 'PingFang SC';font-style: normal;font-size: 14px">Api Request Method</el-button>
+            <el-button size="small" @click.prevent="changeTab('apiRequest')" style="background-color: white;color: #4E5969;border-radius: 2px;font-weight: 400;font-family: 'PingFang SC';font-style: normal;font-size: 14px">Api Request Method</el-button>
           </div>
 
         </div>
@@ -158,11 +158,14 @@
 </template>
 <script>
 import { Loader } from "google-maps";
+import axios from "axios";
+import {ElMessage} from "element-plus";
 const loader = new Loader("YOUR_API_KEY");
 export default {
   data() {
     return {
       nav: null,
+      email:localStorage.getItem("email"),
       contract:["0xhHHq1ouoHJHLJLJY8797hkhIUIHJ","0xd2a4cff31913016155e38e474a2c06d08be276cf","0xef4073a0f2b305a38ec4050e4d3d28bc40ea63f5"],
       origins:["127.0.0.1","localhost"],
       showRecord:"contract",
@@ -192,6 +195,10 @@ export default {
     changeTab(value) {
       this.showRecord = value
     }
+  },
+  created() {
+    this.getProjectInfo(this.email)
+    console.log(localStorage.getItem("email"),localStorage.getItem("token"))
   },
   mounted() {
     loader.load().then(function (google) {
@@ -257,6 +264,50 @@ export default {
       marker.setMap(map);
     });
   },
+  method:{
+    getProjectInfo(email) {
+      axios({
+        method: "patch",
+        url: "http://127.0.0.1:3000/project/list",
+        headers: {
+          "Content-Type": "application/json",
+          withCredentials: " true",
+          crossDomain: "true",
+          'Authorization':'Bearer ' + localStorage.getItem("token")
+        },
+        data: {
+          email: email,
+        },
+      }).then((res) => {
+        console.log(res)
+        if (res['data']['success'] === true) {
+          ElMessage({
+            showClose: true,
+            type: 'success',
+            message: 'Success',
+          })
+        }
+      }).catch((error) => {
+        if (error.response && error.response.status === 401) {
+          ElMessage({
+            showClose: true,
+            type: 'error',
+            message: 'no no no no no ',
+          })
+          console.log("oh no")
+          this.$router.push({
+            path: `login`,
+
+          });
+        } else if (error.request) {
+          console.log(error.request);
+          this.success = false
+        } else {
+          console.log('Error', error.message);
+        }
+      })
+    }
+  }
 };
 </script>
 <style></style>
