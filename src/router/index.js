@@ -114,12 +114,12 @@ const routes = [
         components: { default: Management },
       },
       {
-        path: "/info",
+        path: "/info/:projectId",
         name: "info",
         components: { default: Info },
       },
       {
-        path: "/setting",
+        path: "/setting/:projectId",
         name: "setting",
         components: { default: Setting },
       },

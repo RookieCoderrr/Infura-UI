@@ -11,19 +11,16 @@
     <div style="margin:0;padding:0; width:100%;height:2px;background-color:whitesmoke;overflow:hidden;"></div>
     <div class="option mt-2" style="height: 45px;">
       <div class="left" style="height: 45px; width: 400px;float:left;display: flex;justify-content:center;align-items: center">
-        <el-dropdown >
-          <el-button size="small" style="background-color: white;color:#4D56E1;border-radius: 2px;font-weight: 40 ;font-family:'PingFang SC';font-style: normal;font-size: 14px">
-            Hello1<i class=" ml-1 el-icon-arrow-down"/>
-          </el-button>
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item>Hello1</el-dropdown-item>
-              <el-dropdown-item>Hello2</el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
+        <el-select v-model="value"  @change="selectProject(value)"  class="ml-4" placeholder="Select" size="small" style="background-color: white;color:#4D56E1;border-radius: 2px;font-weight: 40 ;font-family:'PingFang SC';font-style: normal;font-size: 14px">
+          <el-option
+              v-for="item in projectList"
+              :key="item.name"
+              :label="item.name"
+              :value="item.apikey"
+          />
+        </el-select>
         <el-button-group class="ml-4">
-          <el-button size="small" style="background-color: white;color: #4D56E1;border-radius: 2px;font-weight: 40">General</el-button>
+          <el-button size="small" @click.prevent="toInfo(this.projectInfo['apikey'])" style="background-color: white;color: #4D56E1;border-radius: 2px;font-weight: 40">General</el-button>
           <el-button size="small" style="background-color: white;color: #4D56E1;border-radius: 2px;font-weight: 40">Setting</el-button>
         </el-button-group>
       </div>
@@ -37,7 +34,7 @@
       </div>
       <div class=" mt-3 ml-1 pl-3 pt-3 pb-4 card shadow border-0" style="height: 50px;background-color: rgba(255,255,255,0.5);border-radius: 5px;">
           <div class="" style="font-family: 'PingFang SC';font-style: normal;font-weight: 400;font-size:14px;color: #1D2129; ">
-            <el-checkbox v-model="checked"></el-checkbox> <span class="ml-1">Project Secret Required</span>
+            <el-checkbox v-model="checked" @change="this.setProjectSecret"></el-checkbox> <span class="ml-1">Project Secret Required</span>
           </div>
       </div>
       <div class="row mt-3 ml-2" style="font-weight: 600;font-size: 24px;font-family: 'PingFang SC';font-style: normal;color: #1D2129">
@@ -52,10 +49,10 @@
             Per Second Requests Rate-limiting
           </div>
           <div class="" style="display: inline-block;width: 30%;">
-            <el-input v-model="input" placeholder="" clearable />
+            <el-input type="number" v-model.number="inputPerSecond" placeholder="" clearable />
           </div>
           <div class="ml-2" style="display: inline-block;width: 44%;">
-            <el-button style="background-color:#4D56E1;color: white ;width: 100px">Save</el-button>
+            <el-button @click.prevent=" setProjectLimitPerSecond(this.projectId)" style="background-color:#4D56E1;color: white ;width: 100px">Save</el-button>
           </div>
         </div>
         <div class=""   style="height:76px;display: flex;align-items: center;">
@@ -66,10 +63,10 @@
             Per Day Total Requests
           </div>
           <div class="" style="display: inline-block;width: 30%;">
-            <el-input v-model="input" placeholder="" clearable />
+            <el-input type="number" v-model.number="inputPerDay" placeholder="" clearable />
           </div>
           <div class="ml-2" style="display: inline-block;width: 44%;">
-            <el-button style="background-color:#4D56E1;color: white ;width: 100px">Save</el-button>
+            <el-button  @click.prevent=" setProjectLimitPerday(this.projectId)" style="background-color:#4D56E1;color: white ;width: 100px">Save</el-button>
           </div>
         </div>
       </div>
@@ -157,10 +154,10 @@
   </div>
 </template>
 <script>
-import { Loader } from "google-maps";
+
 import axios from "axios";
 import {ElMessage} from "element-plus";
-const loader = new Loader("YOUR_API_KEY");
+
 export default {
   data() {
     return {
@@ -188,83 +185,83 @@ export default {
           value:'getContractHash',
           label:'getContractHash'
         }
-      ]
+      ],
+      projectList:[],
+      value:'',
+      projectInfo:{},
+      projectId:this.$route.params.projectId,
+      checked:false,
+      inputPerSecond:0,
+      inputPerDay:0,
     };
-  },
-  methods:{
-    changeTab(value) {
-      this.showRecord = value
-    }
   },
   created() {
     this.getProjectInfo(this.email)
-    console.log(localStorage.getItem("email"),localStorage.getItem("token"))
+    this.getProjectInfoByProjectId(this.projectId)
   },
-  mounted() {
-    loader.load().then(function (google) {
-      // Regular Map
-      const myLatlng = new google.maps.LatLng(40.748817, -73.985428);
-      const mapOptions = {
-        zoom: 13,
-        center: myLatlng,
-        scrollwheel: false, // we disable de scroll over the map, it is a really annoing when you scroll through page
-        disableDefaultUI: true, // a way to quickly hide all controls
-        zoomControl: true,
-        styles: [
-          {
-            featureType: "administrative",
-            elementType: "labels.text.fill",
-            stylers: [{ color: "#444444" }],
+  watch: {
+    $route: "watchrouter",
+    // checked:"setProjectSecret"
+  },
+  methods:{
+    watchrouter(){
+      if(this.$route.name==="setting") {
+        this.projectId = this.$route.params.projectId,
+        this.getProjectInfo(this.email)
+        this.getProjectInfoByProjectId(this.projectId)
+      }
+
+    },
+    setProjectSecret() {
+        axios({
+          method: "patch",
+          url: "http://127.0.0.1:3000/project/enableProjectSecret",
+          headers: {
+            "Content-Type": "application/json",
+            withCredentials: " true",
+            crossDomain: "true",
+            'Authorization':'Bearer ' + localStorage.getItem("token")
           },
-          {
-            featureType: "landscape",
-            elementType: "all",
-            stylers: [{ color: "#f2f2f2" }],
+          data: {
+            email: this.email,
+            apikey: this.projectId,
+            enable: this.checked,
           },
-          {
-            featureType: "poi",
-            elementType: "all",
-            stylers: [{ visibility: "off" }],
-          },
-          {
-            featureType: "road",
-            elementType: "all",
-            stylers: [{ saturation: -100 }, { lightness: 45 }],
-          },
-          {
-            featureType: "road.highway",
-            elementType: "all",
-            stylers: [{ visibility: "simplified" }],
-          },
-          {
-            featureType: "road.arterial",
-            elementType: "labels.icon",
-            stylers: [{ visibility: "off" }],
-          },
-          {
-            featureType: "transit",
-            elementType: "all",
-            stylers: [{ visibility: "off" }],
-          },
-          {
-            featureType: "water",
-            elementType: "all",
-            stylers: [{ color: "#5e72e4" }, { visibility: "on" }],
-          },
-        ],
-      };
-      const map = new google.maps.Map(
-        document.getElementById("map"),
-        mapOptions
-      );
-      const marker = new google.maps.Marker({
-        position: myLatlng,
-        title: "Regular Map!",
+        }).then((res) => {
+          if (this.checked){
+            ElMessage({
+              showClose: true,
+              type: 'success',
+              message: 'Enable Project Secret Successfully ',
+            })
+            console.log(res)
+          } else {
+            ElMessage({
+              showClose: true,
+              type: 'success',
+              message: ' Disable Project Secret Successfully',
+            })
+          }
+
+        },)
+
+    },
+    changeTab(value) {
+      this.showRecord = value
+    },
+    toInfo(projectId){
+      this.$router.push({
+        path: `/info/${projectId}`
+
       });
-      marker.setMap(map);
-    });
-  },
-  method:{
+    },
+
+    selectProject(projectId){
+      this.$router.push({
+        path: `/setting/${projectId}`
+
+      });
+    },
     getProjectInfo(email) {
       axios({
         method: "patch",
@@ -279,13 +276,9 @@ export default {
           email: email,
         },
       }).then((res) => {
-        console.log(res)
+        // console.log(res)
         if (res['data']['success'] === true) {
-          ElMessage({
-            showClose: true,
-            type: 'success',
-            message: 'Success',
-          })
+          this.projectList = res['data']['data']
         }
       }).catch((error) => {
         if (error.response && error.response.status === 401) {
@@ -306,8 +299,113 @@ export default {
           console.log('Error', error.message);
         }
       })
+    },
+    getProjectInfoByProjectId(apiKey) {
+      axios({
+        method: "patch",
+        url: "http://127.0.0.1:3000/project/listByProjectId",
+        headers: {
+          "Content-Type": "application/json",
+          withCredentials: " true",
+          crossDomain: "true",
+          'Authorization':'Bearer ' + localStorage.getItem("token")
+        },
+        data: {
+          email: this.email,
+          apikey: apiKey
+        },
+      }).then((res) => {
+        // console.log(res)
+        if (res['data']['success'] === true) {
+          this.projectInfo = res['data']['data']
+          this.input = res['data']['data']['name']
+          this.value = res['data']['data']['name']
+          this.checked = res['data']['data']['secretrequired']
+          this.inputPerSecond = res['data']['data']['limitpersecond']
+          this.inputPerDay = res['data']['data']['limitperday']
+          console.log(this.projectInfo)
+
+        }
+      }).catch((error) => {
+        if (error.response && error.response.status === 401) {
+          ElMessage({
+            showClose: true,
+            type: 'error',
+            message: 'no no no no no ',
+          })
+          console.log("oh no")
+          this.$router.push({
+            path: `login`,
+
+          });
+        } else if (error.request) {
+          console.log(error.request);
+          this.success = false
+        } else {
+          console.log('Error', error.message);
+        }
+      })
+    },
+    setProjectLimitPerday(apiKey){
+      axios({
+        method: "patch",
+        url: "http://127.0.0.1:3000/project/limitPerday",
+        headers: {
+          "Content-Type": "application/json",
+          withCredentials: " true",
+          crossDomain: "true",
+          'Authorization':'Bearer ' + localStorage.getItem("token")
+        },
+        data: {
+          email: this.email,
+          apikey: apiKey,
+          limitPerday: this.inputPerDay,
+        },
+      }).then((res) => {
+        // console.log(res)
+        if (res['data']['success'] === true) {
+          this.getProjectInfoByProjectId(apiKey)
+            console.log(res)
+          ElMessage({
+            showClose: true,
+            type: 'success',
+            message: 'set project limitPerDay successfully',
+          })
+        }
+      })
+
+    },
+    setProjectLimitPerSecond(apiKey){
+      axios({
+        method: "patch",
+        url: "http://127.0.0.1:3000/project/limitPerSecond",
+        headers: {
+          "Content-Type": "application/json",
+          withCredentials: " true",
+          crossDomain: "true",
+          'Authorization':'Bearer ' + localStorage.getItem("token")
+        },
+        data: {
+          email: this.email,
+          apikey: apiKey,
+          limitPerSecond: this.inputPerSecond,
+        },
+      }).then((res) => {
+        // console.log(res)
+        if (res['data']['success'] === true) {
+          this.getProjectInfoByProjectId(apiKey)
+          console.log(res)
+          ElMessage({
+            showClose: true,
+            type: 'success',
+            message: 'set project limitPerSecond successfully',
+          })
+        }
+      })
+
     }
-  }
+
+  },
 };
 </script>
 <style></style>
