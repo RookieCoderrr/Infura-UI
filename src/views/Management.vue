@@ -81,13 +81,25 @@ export default {
       formLabelWidth : '140px',
       projectName:'',
       projectList:[],
+      login:true,
     };
   },
   created() {
-    this.getProjectInfo(this.email)
+    this.testLogin()
+    if (this.login) {
+      this.getProjectInfo(this.email)
+    }
     // console.log(localStorage.getItem("email"),localStorage.getItem("token"))
   },
   methods:{
+    testLogin(){
+      if (localStorage.getItem("login")==="false") {
+        this.login = false
+        this.$router.push({
+          path: `/login`,
+        });
+      }
+    },
     getProjectInfo(email) {
       axios({
         method: "patch",
@@ -111,8 +123,9 @@ export default {
           ElMessage({
             showClose: true,
             type: 'error',
-            message: 'no no no no no ',
+            message: 'JWT TIME OUT ',
           })
+          localStorage.setItem("login","false")
           console.log("oh no")
           this.$router.push({
             path: `login`,

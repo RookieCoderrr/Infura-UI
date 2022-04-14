@@ -51,6 +51,19 @@ export default {
       },
     };
   },
+  created() {
+    this.autologin()
+  },
+  methods: {
+    autologin(){
+      console.log((localStorage.getItem("login")))
+      if (localStorage.getItem("login")==="true") {
+        this.$router.push({
+          path: `/management`,
+        });
+      }
+    }
+  }
 };
 </script>
 <style></style>

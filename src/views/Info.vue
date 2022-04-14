@@ -133,6 +133,7 @@ export default {
       dialogFormVisible:false,
       projectList:[],
       value:'',
+      login:true
 
     };
   },
@@ -141,13 +142,25 @@ export default {
   },
 
   created() {
-    this.getProjectInfo(this.email)
-    this.getProjectInfoByProjectId(this.projectId)
-    // console.log(localStorage.getItem("email"),localStorage.getItem("token"))
+    this.testLogin()
+    if (this.login) {
+      this.getProjectInfo(this.email)
+      this.getProjectInfoByProjectId(this.projectId)
+      // console.log(localStorage.getItem("email"),localStorage.getItem("token"))
+    }
+
   },
   mounted() {
   },
   methods:{
+    testLogin(){
+      if (localStorage.getItem("login")==="false") {
+        this.login = false
+        this.$router.push({
+          path: `/login`,
+        });
+      }
+    },
     watchrouter(){
       if(this.$route.name==="info") {
         this.projectId = this.$route.params.projectId,
@@ -191,13 +204,15 @@ export default {
           ElMessage({
             showClose: true,
             type: 'error',
-            message: 'no no no no no ',
+            message: 'JWT TIME OUT',
           })
           console.log("oh no")
+          localStorage.setItem("login","false")
           this.$router.push({
             path: `login`,
 
           });
+
         } else if (error.request) {
           console.log(error.request);
           this.success = false

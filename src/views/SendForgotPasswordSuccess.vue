@@ -56,6 +56,9 @@ export default {
       },
     };
   },
+  created() {
+    this.autologin()
+  },
   methods:{
     toLogin() {
       this.$router.push({
@@ -113,6 +116,14 @@ export default {
         }
       })
     },
+    autologin(){
+      console.log((localStorage.getItem("login")))
+      if (localStorage.getItem("login")==="true") {
+        this.$router.push({
+          path: `/management`,
+        });
+      }
+    }
   }
 };
 </script>

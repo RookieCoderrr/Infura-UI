@@ -73,6 +73,7 @@ export default {
       model: {
         email: "",
         password: "",
+        login :"false",
       },
       checked:false,
     };
@@ -81,21 +82,18 @@ export default {
     let username = localStorage.getItem("email");
     if (username) {
       this.model.email = localStorage.getItem("email");
+    }
+    let password = localStorage.getItem("password")
+    if (password){
       this.model.password = Base64.decode(localStorage.getItem("password"));// base64解密
-      this.checked = true;
+      this.checked = true
     }
   },
-
+  created() {
+    this.autologin()
+  },
   methods: {
     login(email,password) {
-      if (this.checked) {
-        let passwordCode = Base64.encode(this.model.password); // base64加密
-        localStorage.setItem("email", this.model.email);
-        localStorage.setItem("password", passwordCode);
-      } else {
-        localStorage.removeItem("email");
-        localStorage.removeItem("password");
-      }
       axios({
         method: "post",
         url: "/api/auth/email/login",
@@ -111,6 +109,16 @@ export default {
       }).then((res) => {
          console.log(res)
          if (res['data']['success'] === true) {
+           if (this.checked) {
+             let passwordCode = Base64.encode(this.model.password); // base64加密
+             localStorage.setItem("email", this.model.email);
+             localStorage.setItem("login", "true");
+             localStorage.setItem("password", passwordCode);
+           } else {
+             localStorage.setItem("email", this.model.email);
+             localStorage.setItem("login", "true");
+             localStorage.removeItem("password");
+           }
            let token = res['data']['data']['token']['access_token']
            let email = res['data']['data']['user']['email']
            localStorage.setItem("token",token)
@@ -157,6 +165,14 @@ export default {
         }
       })
     },
+    autologin(){
+      console.log((localStorage.getItem("login")))
+      if (localStorage.getItem("login")==="true") {
+        this.$router.push({
+          path: `/management`,
+        });
+      }
+    }
   }
 };
 </script>

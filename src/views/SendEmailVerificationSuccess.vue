@@ -59,7 +59,9 @@ export default {
     };
   },
   created() {
+    this.autologin()
     this.getRouterData()
+
   },
   methods: {
     getRouterData() {
@@ -111,6 +113,14 @@ export default {
         }
       })
     },
+    autologin(){
+      console.log((localStorage.getItem("login")))
+      if (localStorage.getItem("login")==="true") {
+        this.$router.push({
+          path: `/management`,
+        });
+      }
+    }
   }
 };
 </script>

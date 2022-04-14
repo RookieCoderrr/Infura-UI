@@ -18,10 +18,22 @@
         <div class="ml-3" style="color:white; font-size: 27px;font-weight: 500; font-style: normal; font-family: 'PingFang SC';vertical-align:middle;display: inline-block ">Hi</div>
       </div>
       <div class="mt-2" style="font-size: 24px;font-weight: 500; font-style: normal; font-family: 'PingFang SC'; color: white ">
-        Steven.L
+        {{ this.nickName }}
+        <i class="el-icon-edit" @click.prevent=" dialogFormVisible = true" style="size: 10px;cursor: pointer" />
+        <el-dialog v-model="dialogFormVisible" title="Edit Name" width="30%">
+          <el-input v-model="setNickName" autocomplete="off" />
+          <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">Cancel</el-button>
+        <el-button type="primary" @click="setUserNickName(this.email,setNickName)"
+        >Change</el-button
+        >
+      </span>
+          </template>
+        </el-dialog>
       </div>
       <div class="mt-2" style="font-size: 12px;font-weight: 400; font-style: normal; font-family: 'PingFang SC'; color: white ">
-        123456789@gmail.com
+        {{ this.email }}
       </div>
       <slot name="mobile-right">
         <ul class="nav align-items-center d-md-none">
@@ -184,6 +196,8 @@
 </template>
 <script>
 import NavbarToggleButton from "@/components/NavbarToggleButton";
+import axios from "axios";
+import {ElMessage} from "element-plus";
 
 export default {
   name: "sidebar",
@@ -206,14 +220,106 @@ export default {
   data() {
     return {
       drop: false,
+      email:localStorage.getItem("email"),
+      nickName: '',
+      dialogFormVisible:false,
+      setNickName:'',
     }
+  },
+  created() {
+    this.getUserInfo(this.email)
   },
   provide() {
     return {
       autoClose: this.autoClose,
+
     };
   },
   methods: {
+    getUserInfo(email) {
+      axios({
+        method: "get",
+        url: "http://127.0.0.1:3000/users/user/"+email,
+        headers: {
+          "Content-Type": "application/json",
+          withCredentials: " true",
+          crossDomain: "true",
+          'Authorization':'Bearer ' + localStorage.getItem("token")
+        },
+      }).then((res) => {
+        // console.log(res)
+        if (res['data']['success'] === true) {
+          this.nickName = res['data']['data']['nickname']
+        }
+      }).catch((error) => {
+        if (error.response && error.response.status === 401) {
+          ElMessage({
+            showClose: true,
+            type: 'error',
+            message: 'JWT TIME OUT',
+          })
+          console.log("oh no")
+          localStorage.setItem("login","false")
+          this.$router.push({
+            path: `login`,
+
+          });
+
+        } else if (error.request) {
+          console.log(error.request);
+          this.success = false
+        } else {
+          console.log('Error', error.message);
+        }
+      })
+    },
+    setUserNickName(email,name) {
+      axios({
+        method: "patch",
+        url: "http://127.0.0.1:3000/users/updateNickName/",
+        headers: {
+          "Content-Type": "application/json",
+          withCredentials: " true",
+          crossDomain: "true",
+          'Authorization':'Bearer ' + localStorage.getItem("token")
+        },
+        data:{
+          email:email,
+          name:name,
+        }
+      }).then((res) => {
+        // console.log(res)
+        if (res['data']['success'] === true) {
+          ElMessage({
+            showClose: true,
+            type: 'success',
+            message: 'Success',
+          })
+          this.dialogFormVisible= false
+          this.getUserInfo(email)
+        }
+      }).catch((error) => {
+        if (error.response && error.response.status === 401) {
+          ElMessage({
+            showClose: true,
+            type: 'error',
+            message: 'JWT TIME OUT',
+          })
+          console.log("oh no")
+          localStorage.setItem("login","false")
+          this.$router.push({
+            path: `login`,
+
+          });
+
+        } else if (error.request) {
+          console.log(error.request);
+          this.success = false
+        } else {
+          console.log('Error', error.message);
+        }
+      })
+    },
     closeSidebar() {
       this.$sidebar.displaySidebar(false);
     },

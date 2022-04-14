@@ -87,11 +87,10 @@
           </div>
 
         </div>
-        <div class="mt-2 mb-2"   style="display: flex;align-items: center;">
-          <div v-if="this.showRecord==='apiRequest'" class="" style="display: inline-block;width: 56%;">
+        <div v-if="this.showRecord==='apiRequest'" class="mt-2 mb-2"   style="display: flex;align-items: center;">
+          <div  class="" style="display: inline-block;width: 56%;">
             <el-select
                 v-model="value1"
-                multiple
                 placeholder="Select"
                 style="width: 100%"
             >
@@ -103,21 +102,34 @@
               />
             </el-select>
           </div>
-          <div v-else class="" style="display: inline-block;width: 56%;">
-            <el-input v-model="input" placeholder="" clearable />
+          <div class="ml-2" style="display: inline-block;width: 44%;">
+            <el-button @click.prevent="addApiRequest(this.projectId,this.value1)" style="background-color:#4D56E1;color: white ;width: 100px">Add</el-button>
+          </div>
+        </div>
+        <div v-if="this.showRecord==='contract'" class="mt-2 mb-2"   style="display: flex;align-items: center;">
+          <div class="" style="display: inline-block;width: 56%;">
+            <el-input v-model="inputContract" placeholder="" clearable />
           </div>
           <div class="ml-2" style="display: inline-block;width: 44%;">
-            <el-button style="background-color:#4D56E1;color: white ;width: 100px">Add</el-button>
+            <el-button @click.prevent="addProjectContract(this.projectId)" style="background-color:#4D56E1;color: white ;width: 100px">Add</el-button>
+          </div>
+        </div>
+        <div v-if="this.showRecord==='origin'" class="mt-2 mb-2"   style="display: flex;align-items: center;">
+          <div class="" style="display: inline-block;width: 56%;">
+            <el-input v-model="inputOrigin" placeholder="" clearable />
+          </div>
+          <div class="ml-2" style="display: inline-block;width: 44%;">
+            <el-button @click.prevent="addProjectOrigin(this.projectId)" style="background-color:#4D56E1;color: white ;width: 100px">Add</el-button>
           </div>
         </div>
         <div v-if="this.showRecord==='contract'">
-          <div class="mt-2 mb-2" v-for="(param, ind) in contract"
+          <div class="mt-2 mb-2" v-for="(param, ind) in allowContract"
                :key="ind" style="display: flex;align-items: center;">
             <div class="" style="display: inline-block; font-family: 'PingFang SC';font-style: normal;font-weight: 400;font-size: 14px;color:#4E5969 " >
               {{ param }}
             </div>
             <div class="ml-4" style="display: inline-block;">
-              <el-button type="text" style="font-family: 'PingFang SC';font-style: normal;font-weight: 400;font-size: 14px;color:#4D56E1 ">Remove </el-button>
+              <el-button @click.prevent="deleteProjectContract(this.projectId,param)" type="text" style="font-family: 'PingFang SC';font-style: normal;font-weight: 400;font-size: 14px;color:#4D56E1 ">Remove </el-button>
             </div>
 
           </div>
@@ -129,7 +141,7 @@
               {{ param }}
             </div>
             <div class="ml-4" style="display: inline-block;">
-              <el-button type="text" style="font-family: 'PingFang SC';font-style: normal;font-weight: 400;font-size: 14px;color:#4D56E1 ">Remove </el-button>
+              <el-button @click.prevent="deleteProjectOrigin(this.projectId,param)" type="text" style="font-family: 'PingFang SC';font-style: normal;font-weight: 400;font-size: 14px;color:#4D56E1 ">Remove </el-button>
             </div>
 
           </div>
@@ -142,7 +154,7 @@
               {{ param }}
             </div>
             <div class="ml-4" style="display: inline-block;">
-              <el-button type="text" style="font-family: 'PingFang SC';font-style: normal;font-weight: 400;font-size: 14px;color:#4D56E1 ">Remove </el-button>
+              <el-button @click.prevent="deleteProjectApiMethod(this.projectId,param)" type="text" style="font-family: 'PingFang SC';font-style: normal;font-weight: 400;font-size: 14px;color:#4D56E1 ">Remove </el-button>
             </div>
 
           </div>
@@ -164,10 +176,10 @@ export default {
       nav: null,
       email:localStorage.getItem("email"),
       contract:["0xhHHq1ouoHJHLJLJY8797hkhIUIHJ","0xd2a4cff31913016155e38e474a2c06d08be276cf","0xef4073a0f2b305a38ec4050e4d3d28bc40ea63f5"],
-      origins:["127.0.0.1","localhost"],
+      origins:[],
       showRecord:"contract",
-      apiRequest:["getBlockCount","getBlockInfoByBlockHash","getCommittee","getAccount","getContractHash"],
-      value1:[],
+      apiRequest:[],
+      value1:'',
       options:[
         {
           value:'getBlockCount',
@@ -193,17 +205,34 @@ export default {
       checked:false,
       inputPerSecond:0,
       inputPerDay:0,
+      inputContract:'',
+      inputOrigin:'',
+      inputApiRequest:'',
+      allowContract:[],
+      login:true,
     };
   },
   created() {
-    this.getProjectInfo(this.email)
-    this.getProjectInfoByProjectId(this.projectId)
+    this.testLogin()
+    if(this.login) {
+      this.getProjectInfo(this.email)
+      this.getProjectInfoByProjectId(this.projectId)
+    }
+
   },
   watch: {
     $route: "watchrouter",
     // checked:"setProjectSecret"
   },
   methods:{
+    testLogin(){
+      if (localStorage.getItem("login")==="false") {
+        this.login = false
+        this.$router.push({
+          path: `/login`,
+        });
+      }
+    },
     watchrouter(){
       if(this.$route.name==="setting") {
         this.projectId = this.$route.params.projectId,
@@ -285,9 +314,10 @@ export default {
           ElMessage({
             showClose: true,
             type: 'error',
-            message: 'no no no no no ',
+            message: 'JWT TIME OUT ',
           })
           console.log("oh no")
+          localStorage.setItem("login","false")
           this.$router.push({
             path: `login`,
 
@@ -323,6 +353,9 @@ export default {
           this.checked = res['data']['data']['secretrequired']
           this.inputPerSecond = res['data']['data']['limitpersecond']
           this.inputPerDay = res['data']['data']['limitperday']
+          this.allowContract = res['data']['data']['contractAddress']
+          this.origins = res['data']['data']['origin']
+          this.apiRequest = res['data']['data']['apiRequest']
           console.log(this.projectInfo)
 
         }
@@ -403,7 +436,181 @@ export default {
         }
       })
 
-    }
+    },
+    addProjectContract(apiKey){
+      axios({
+        method: "patch",
+        url: "http://127.0.0.1:3000/project/allowContract",
+        headers: {
+          "Content-Type": "application/json",
+          withCredentials: " true",
+          crossDomain: "true",
+          'Authorization':'Bearer ' + localStorage.getItem("token")
+        },
+        data: {
+          email: this.email,
+          apikey: apiKey,
+          contract: this.inputContract,
+        },
+      }).then((res) => {
+        // console.log(res)
+        if (res['data']['success'] === true) {
+          this.getProjectInfoByProjectId(apiKey)
+          console.log(res)
+          ElMessage({
+            showClose: true,
+            type: 'success',
+            message: 'set project allow contract successfully',
+          })
+        }
+      })
+
+    },
+    addApiRequest(apiKey,apiRequest){
+      axios({
+        method: "patch",
+        url: "http://127.0.0.1:3000/project/apiMethod",
+        headers: {
+          "Content-Type": "application/json",
+          withCredentials: " true",
+          crossDomain: "true",
+          'Authorization':'Bearer ' + localStorage.getItem("token")
+        },
+        data: {
+          email: this.email,
+          apikey: apiKey,
+          apiMethod: apiRequest,
+        },
+      }).then((res) => {
+        // console.log(res)
+        if (res['data']['success'] === true) {
+          this.getProjectInfoByProjectId(apiKey)
+          console.log(res)
+          ElMessage({
+            showClose: true,
+            type: 'success',
+            message: 'set project apiRequest successfully',
+          })
+        }
+      })
+
+    },
+    addProjectOrigin(apiKey){
+      axios({
+        method: "patch",
+        url: "http://127.0.0.1:3000/project/projectOrigin",
+        headers: {
+          "Content-Type": "application/json",
+          withCredentials: " true",
+          crossDomain: "true",
+          'Authorization':'Bearer ' + localStorage.getItem("token")
+        },
+        data: {
+          email: this.email,
+          apikey: apiKey,
+          origin: this.inputOrigin,
+        },
+      }).then((res) => {
+        // console.log(res)
+        if (res['data']['success'] === true) {
+          this.getProjectInfoByProjectId(apiKey)
+          console.log(res)
+          ElMessage({
+            showClose: true,
+            type: 'success',
+            message: 'set project origin successfully',
+          })
+        }
+      })
+
+    },
+    deleteProjectContract(apiKey,contract){
+      axios({
+        method: "patch",
+        url: "http://127.0.0.1:3000/project/deleteAllowContract",
+        headers: {
+          "Content-Type": "application/json",
+          withCredentials: " true",
+          crossDomain: "true",
+          'Authorization':'Bearer ' + localStorage.getItem("token")
+        },
+        data: {
+          email: this.email,
+          apikey: apiKey,
+          contract: contract,
+        },
+      }).then((res) => {
+        // console.log(res)
+        if (res['data']['success'] === true) {
+          this.getProjectInfoByProjectId(apiKey)
+          console.log(res)
+          ElMessage({
+            showClose: true,
+            type: 'success',
+            message: 'delete project allow contract successfully',
+          })
+        }
+      })
+
+    },
+    deleteProjectOrigin(apiKey,origin){
+      axios({
+        method: "patch",
+        url: "http://127.0.0.1:3000/project/deleteProjectOrigin",
+        headers: {
+          "Content-Type": "application/json",
+          withCredentials: " true",
+          crossDomain: "true",
+          'Authorization':'Bearer ' + localStorage.getItem("token")
+        },
+        data: {
+          email: this.email,
+          apikey: apiKey,
+          origin: origin,
+        },
+      }).then((res) => {
+        // console.log(res)
+        if (res['data']['success'] === true) {
+          this.getProjectInfoByProjectId(apiKey)
+          console.log(res)
+          ElMessage({
+            showClose: true,
+            type: 'success',
+            message: 'delete project origin successfully',
+          })
+        }
+      })
+
+    },
+    deleteProjectApiMethod(apiKey,apiMethod){
+      axios({
+        method: "patch",
+        url: "http://127.0.0.1:3000/project/deleteApiMethod",
+        headers: {
+          "Content-Type": "application/json",
+          withCredentials: " true",
+          crossDomain: "true",
+          'Authorization':'Bearer ' + localStorage.getItem("token")
+        },
+        data: {
+          email: this.email,
+          apikey: apiKey,
+          apiMethod: apiMethod,
+        },
+      }).then((res) => {
+        // console.log(res)
+        if (res['data']['success'] === true) {
+          this.getProjectInfoByProjectId(apiKey)
+          console.log(res)
+          ElMessage({
+            showClose: true,
+            type: 'success',
+            message: 'delete project apiMethod successfully',
+          })
+        }
+      })
+
+    },
 
   },
 };

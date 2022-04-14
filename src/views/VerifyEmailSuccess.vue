@@ -79,6 +79,7 @@ export default {
     };
   },
   created() {
+    this.autologin()
     this.verifyEmailToken(this.$route.params.token)
   },
   methods:{
@@ -137,8 +138,17 @@ export default {
       this.$router.push({
         path: `/login`,
       });
+    },
+    autologin(){
+      console.log((localStorage.getItem("login")))
+      if (localStorage.getItem("login")==="true") {
+        this.$router.push({
+          path: `/management`,
+        });
+      }
     }
-  }
+  },
+
 };
 </script>
 <style></style>

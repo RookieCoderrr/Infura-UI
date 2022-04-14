@@ -76,15 +76,27 @@ export default {
     return {
       nav: null,
       email:localStorage.getItem("email"),
+      login:true,
     };
   },
   created() {
-    this.getProjectInfo(this.email)
-    console.log(localStorage.getItem("email"),localStorage.getItem("token"))
+    this.testLogin()
+    if (this.login) {
+      this.getProjectInfo(this.email)
+    }
+
   },
   mounted() {
   },
   methods:{
+    testLogin(){
+      if (localStorage.getItem("login")==="false") {
+        this.login = false
+        this.$router.push({
+          path: `/login`,
+        });
+      }
+    },
     getProjectInfo(email) {
       axios({
         method: "patch",
