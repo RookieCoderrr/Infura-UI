@@ -94,7 +94,7 @@ const routes = [
         components: { default: Icons },
       },
       {
-        path: "/dashboardv2",
+        path: "/dashboardv2/:net/:projectId",
         name: "dashboardv2",
         components: { default: DashBoardv2 },
       },

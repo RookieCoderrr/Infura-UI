@@ -33,9 +33,9 @@
       <div class="row mt-3" v-for="(item, index) in this.projectList"
            :key="index">
         <div class="col">
-          <div class="card shadow border-0">
+          <div class="card shadow border-0"  >
            <div class="row" style="height: 100px">
-             <div class="col-3" style="">
+             <div class="col-3"  @click.prevent="toDashBoard(item['apikey'],'mainnet')" style="cursor: pointer">
                 <div style="font-family: NucleoIcons;font-style: normal;font-weight: 600;font-size: 26px;height: 60px;display: flex;align-items: center; text-align: left;color:#1D2129 ">
                   <span class="ml-5">{{ item['name'] }}</span>
                 </div>
@@ -82,6 +82,8 @@ export default {
       projectName:'',
       projectList:[],
       login:true,
+      apikey:'',
+      net:''
     };
   },
   created() {
@@ -158,7 +160,12 @@ export default {
         this.dialogFormVisible = false
 
         if (res['data']['success'] === true) {
-            this.getProjectInfo(this.email)
+          this.net = "mainnet"
+          this.apikey= res['data']['data']['apikey']
+          this.getProjectInfo(this.email)
+          this.$router.push({
+            path: `/dashboardv2/${this.net}/${this.apikey}`
+          });
         }
       }).catch((error) => {
         if (error.response && error.response.status === 401) {
@@ -193,6 +200,12 @@ export default {
       });
       console.log(apikey)
     },
+    toDashBoard(apikey,mainnet){
+      this.$router.push({
+        path: `/dashboardv2/${mainnet}/${apikey}`
+      });
+      console.log(apikey)
+    }
   }
 };
 </script>

@@ -128,7 +128,7 @@
         <!--Navigation-->
         <ul class="navbar-nav mb-md-3">
           <li class="nav-item " >
-            <router-link class=" nav-link nav-focus" to="/dashboardv2" style="color: white;height:56px; cursor: pointer;font-size: 16px;font-weight: 400;font-style: normal;font-family: 'PingFang SC'">
+            <router-link @click.prevent="fresh" class=" nav-link nav-focus" :to="'/'" style="color: white;height:56px; cursor: pointer;font-size: 16px;font-weight: 400;font-style: normal;font-family: 'PingFang SC'">
               <svg class="svg" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 5%">
                 <path d="M12 7.0791C10.0468 7.0791 8.21044 7.83974 6.82929 9.22089C5.44814 10.602 4.6875 12.4383 4.6875 14.3916C4.6875 14.8058 5.02329 15.1416 5.4375 15.1416C5.85171 15.1416 6.1875 14.8058 6.1875 14.3916C6.1875 12.839 6.79209 11.3794 7.88995 10.2815C8.98779 9.1837 10.4474 8.57908 12 8.57908C13.5526 8.57908 15.0122 9.18367 16.11 10.2815C17.2079 11.3794 17.8125 12.839 17.8125 14.3916C17.8125 14.8058 18.1483 15.1416 18.5625 15.1416C18.9767 15.1416 19.3125 14.8058 19.3125 14.3916C19.3125 12.4383 18.5519 10.602 17.1707 9.22087C15.7896 7.83972 13.9532 7.0791 12 7.0791Z" fill="white"/>
                 <path d="M12 3.70312C6.201 3.70312 1.5 8.40413 1.5 14.2031C1.5 16.3125 2.12215 18.2765 3.19275 19.9219H20.8073C21.8779 18.2765 22.5 16.3125 22.5 14.2031C22.5 8.40413 17.799 3.70312 12 3.70312ZM19.9521 18.4219H4.04794C3.3603 17.1284 3 15.685 3 14.2031C3 12.9875 3.23775 11.809 3.70664 10.7004C4.15985 9.62883 4.809 8.66618 5.63604 7.83916C6.46305 7.01213 7.4257 6.363 8.49724 5.90977C9.60586 5.44087 10.7843 5.20312 12 5.20312C13.2157 5.20312 14.3941 5.44087 15.5028 5.90977C16.5743 6.36298 17.5369 7.01213 18.364 7.83916C19.191 8.66618 19.8401 9.62883 20.2934 10.7004C20.7622 11.809 21 12.9875 21 14.2031C21 15.685 20.6397 17.1284 19.9521 18.4219Z" fill="white"/>
@@ -148,8 +148,8 @@
 
           </li>
           <li class="nav-item " >
-            <router-link class="nav-link nav-focus" to="/dashboardv2" style="color: white;height:56px;cursor: pointer;font-size: 16px;font-weight: 400;font-style: normal;font-family: 'PingFang SC'">
-              <svg class="svg" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 5%">
+            <router-link class="nav-link nav-focus" :to="'/dashboardv2/' + this.email+'/'+this.projectId" style="color: white;height:56px;cursor: pointer;font-size: 16px;font-weight: 400;font-style: normal;font-family: 'PingFang SC'">
+              <svg class="svg" width="24" height="24" viewBox="0  0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 5%">
                 <path d="M21.3276 9.64465C21.2846 9.51253 21.2056 9.39505 21.0994 9.3055C20.9932 9.21595 20.864 9.15791 20.7265 9.13794L15.2837 8.34706L12.8496 3.41504C12.7881 3.29046 12.693 3.18556 12.575 3.11222C12.457 3.03887 12.3209 3 12.182 3C12.043 3 11.9069 3.03887 11.7889 3.11222C11.6709 3.18556 11.5758 3.29046 11.5143 3.41504L9.08024 8.34708L3.63742 9.13796C3.49995 9.15795 3.37081 9.216 3.26461 9.30554C3.15841 9.39509 3.07937 9.51256 3.03644 9.64468C2.99352 9.77679 2.9884 9.91829 3.02168 10.0532C3.05497 10.188 3.12532 10.3109 3.22478 10.4079L7.16326 14.2469L6.23352 19.6677C6.21003 19.8047 6.22531 19.9454 6.27765 20.0741C6.32999 20.2028 6.41729 20.3143 6.52969 20.396C6.64208 20.4776 6.77508 20.5262 6.91365 20.5362C7.05221 20.5462 7.19081 20.5173 7.31378 20.4526L12.182 17.8932L17.0502 20.4526C17.2123 20.5381 17.5858 20.558 17.8343 20.3959C18.0707 20.2417 18.1784 19.9471 18.1304 19.6677L17.2007 14.2469L21.1392 10.4079C21.2386 10.3109 21.309 10.188 21.3423 10.0532C21.3756 9.91828 21.3705 9.77678 21.3276 9.64465V9.64465ZM15.8811 13.4539C15.7946 13.5381 15.73 13.6421 15.6927 13.7569C15.6554 13.8717 15.6465 13.9939 15.6669 14.1129L16.4078 18.4326L12.5284 16.3931C12.4216 16.3369 12.3027 16.3076 12.182 16.3076C12.0612 16.3076 11.9423 16.3369 11.8355 16.3931L7.95611 18.4326L8.69699 14.1129C8.7174 13.9939 8.70857 13.8718 8.67127 13.757C8.63398 13.6421 8.56932 13.5381 8.48289 13.4539L5.34437 10.3946L9.68167 9.76435C9.80113 9.74699 9.91457 9.70085 10.0122 9.6299C10.1099 9.55895 10.1888 9.46532 10.2422 9.35708L12.182 5.4268L14.1217 9.35705C14.1751 9.46529 14.2541 9.55893 14.3517 9.62988C14.4494 9.70083 14.5628 9.74697 14.6822 9.76433L19.0196 10.3946L15.8811 13.4539Z" fill="white"/>
               </svg>
               Plan
@@ -221,13 +221,20 @@ export default {
     return {
       drop: false,
       email:localStorage.getItem("email"),
+      projectId:localStorage.getItem("apikey"),
       nickName: '',
       dialogFormVisible:false,
       setNickName:'',
+      projectList:[],
+      net:localStorage.getItem("net"),
     }
+  },
+  watch:{
+    // $route: "watchrouter",
   },
   created() {
     this.getUserInfo(this.email)
+    // this.getProject(this.email)
   },
   provide() {
     return {
@@ -236,6 +243,154 @@ export default {
     };
   },
   methods: {
+    fresh() {
+      console.log("fresh")
+      console.log(this.projectId)
+      console.log(this.net)
+      this.projectId  = localStorage.getItem("apikey"),
+          this.net = localStorage.getItem("net")
+      if(this.net === null) {
+        console.log("yes")
+        localStorage.setItem("net","mainnet")
+        this.net = localStorage.getItem("net")
+      }
+      if (this.projectId === null) {
+        console.log("yes")
+        this.getProjectInfo(this.email)
+      } else {
+        this.$router.push({
+          path: `/dashboardv2/${this.net}/${this.projectId}`
+
+        });
+      }
+    },
+    watchrouter() {
+      if(this.$route.name==="dashboardv2") {
+        console.log("haha")
+        console.log(this.projectId)
+        console.log(this.net)
+            this.getProjectInfo(this.email)
+      }
+    },
+    getProject(email) {
+      axios({
+        method: "patch",
+        url: "http://127.0.0.1:3000/project/list",
+        headers: {
+          "Content-Type": "application/json",
+          withCredentials: " true",
+          crossDomain: "true",
+          'Authorization':'Bearer ' + localStorage.getItem("token")
+        },
+        data: {
+          email: email,
+        },
+      }).then((res) => {
+        // console.log(res)
+        if (res['data']['success'] === true) {
+          this.projectList = res['data']['data']
+          if (this.projectList.length === 0) {
+            localStorage.setItem("apikey","Noprojects")
+            this.projectId  = localStorage.getItem("apikey")
+            localStorage.setItem("net","mainnet")
+            this.net = localStorage.getItem("net")
+            this.$router.push({
+              path: `/dashboardv2/${this.net}/${this.projectId}`
+
+            });
+          } else {
+            if (localStorage.getItem("apikey") === null && localStorage.getItem("net")===null) {
+              localStorage.setItem("apikey" ,res['data']['data'][0])
+              this.projectId  = localStorage.getItem("apikey")
+              localStorage.setItem("net","mainnet")
+              this.net  = localStorage.getItem("apikey")
+              this.$router.push({
+                path: `/dashboardv2/${this.net}/${this.projectId}`
+
+              });
+            }
+
+          }
+        }
+      }).catch((error) => {
+        if (error.response && error.response.status === 401) {
+          ElMessage({
+            showClose: true,
+            type: 'error',
+            message: 'JWT TIME OUT',
+          })
+          console.log("oh no")
+          localStorage.setItem("login","false")
+          this.$router.push({
+            path: `login`,
+
+          });
+
+        } else if (error.request) {
+          console.log(error.request);
+          this.success = false
+        } else {
+          console.log('Error', error.message);
+        }
+      })
+    },
+    getProjectInfo(email) {
+      axios({
+        method: "patch",
+        url: "http://127.0.0.1:3000/project/list",
+        headers: {
+          "Content-Type": "application/json",
+          withCredentials: " true",
+          crossDomain: "true",
+          'Authorization':'Bearer ' + localStorage.getItem("token")
+        },
+        data: {
+          email: email,
+        },
+      }).then((res) => {
+        // console.log(res)
+        if (res['data']['success'] === true) {
+          this.projectList = res['data']['data']
+          if (this.projectList.length === 0) {
+            localStorage.setItem("apikey","Noprojects")
+            this.projectId  = localStorage.getItem("apikey")
+            this.$router.push({
+              path: `/dashboardv2/${this.net}/${this.projectId}`
+
+            });
+          } else {
+            this.apikey = res['data']['data'][0]['apikey']
+            localStorage.setItem("apikey",this.apikey)
+            this.projectId  = localStorage.getItem("apikey")
+            console.log(this.projectId)
+            this.$router.push({
+              path: `/dashboardv2/${this.net}/${this.projectId}`
+
+            });
+          }
+        }
+      }).catch((error) => {
+        if (error.response && error.response.status === 401) {
+          ElMessage({
+            showClose: true,
+            type: 'error',
+            message: 'JWT TIME OUT',
+          })
+          console.log("oh no")
+          localStorage.setItem("login","false")
+          this.$router.push({
+            path: `login`,
+
+          });
+
+        } else if (error.request) {
+          console.log(error.request);
+          this.success = false
+        } else {
+          console.log('Error', error.message);
+        }
+      })
+    },
     getUserInfo(email) {
       axios({
         method: "get",
@@ -250,6 +405,7 @@ export default {
         // console.log(res)
         if (res['data']['success'] === true) {
           this.nickName = res['data']['data']['nickname']
+          console.log(this.nickName)
         }
       }).catch((error) => {
         if (error.response && error.response.status === 401) {

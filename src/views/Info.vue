@@ -333,6 +333,8 @@ export default {
             type: 'success',
             message: 'Success',
           })
+          localStorage.removeItem("apikey")
+          localStorage.removeItem("net")
           this.$router.push({
             path: `/management`,
 
