@@ -13,7 +13,7 @@
     </div>
     <div class="col-lg-1"></div>
     <div class="col-lg-5 " >
-      <div class="card  shadow border-0" style="background: rgba(255, 255, 255, 0.1)" >
+      <div class="card  shadow border-0" v-loading="loading"  element-loading-text="Verifying..." style="background: rgba(255, 255, 255, 0.1)" >
         <div class="card-body " style="height: 350px;width: 464px" >
           <div class="LoginTitle" style=" margin-top:20px;margin-left:20px;font-weight: bold; font-size: 24px; color: #4E5969;">
             Forgot Password
@@ -51,6 +51,7 @@ export default {
       model: {
         email: "",
       },
+      loading :false,
     };
   },
   created() {
@@ -58,6 +59,7 @@ export default {
   },
   methods:{
     sendForgotPassword(email) {
+      this.loading = true
       axios({
         method: "get",
         url: "http://127.0.0.1:3000/auth/email/forgot-password/"+email,
@@ -70,6 +72,7 @@ export default {
         console.log(email)
         console.log(res)
         if (res['data']['success'] === true) {
+          this.loading = false,
           ElMessage({
             showClose: true,
             type: 'success',
@@ -79,18 +82,21 @@ export default {
             name: `sendForgotPasswordSuccess`,
           });
         } else if (res['data']['success'] === false && res['data']['data']['status'] === 500) {
+          this.loading = false,
           ElMessage({
             showClose: true,
             type: 'error',
             message: 'RESET_PASSWORD.EMAIL_SENDED_RECENTLY',
           })
         }else if (res['data']['success'] === false && res['data']['data']['status'] === 404) {
+          this.loading = false,
           ElMessage({
             showClose: true,
             type: 'error',
             message: 'LOGIN.USER_NOT_FOUND',
           })
         } else {
+          this.loading = false,
           ElMessage({
             showClose: true,
             type: 'error',
@@ -99,14 +105,17 @@ export default {
         }
       }).catch(function (error) {
         if (error.response && error.response.status === 400) {
+          this.loading = false,
           ElMessage({
             showClose: true,
             type: 'error',
             message: 'EMAIL NOT STANDARD OR PASSWORD NOT STANDARD',
           })
         } else if (error.request) {
+          this.loading = false,
           console.log(error.request);
         } else {
+          this.loading = false,
           console.log('Error', error.message);
         }
       })

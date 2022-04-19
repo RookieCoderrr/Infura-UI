@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="na" style=" height: 60px">
+    <div class="na ml-4" style=" height: 60px">
       <div class="na-left" style="height: 60px; width: 50px;float:left;display:flex; align-items:center; justify-content:center;">
         <img src="@/assets/shortLogo.svg">
       </div>
@@ -33,7 +33,9 @@
             <el-input
                 v-model="inputOldPassword"
                 type="password"
-                placeholder="Please input password"
+                placeholder="Please input old password"
+                maxlength="20"
+                minlength="8"
                 show-password
             />
           </div>
@@ -49,7 +51,9 @@
             <el-input
                 v-model="inputNewPassword"
                 type="password"
-                placeholder="Please input password"
+                placeholder="Please input new password"
+                maxlength="20"
+                minlength="8"
                 show-password
             />
           </div>
@@ -65,7 +69,9 @@
             <el-input
                 v-model="inputConfirmPassword"
                 type="password"
-                placeholder="Please input password"
+                placeholder="Please input confirm password"
+                maxlength="20"
+                minlength="8"
                 show-password
             />
           </div>
@@ -76,7 +82,7 @@
 
           </div>
           <div class="" style="display: inline-block;width: 24%;text-align: left;font-style: normal;font-weight: 400;font-size: 16px;color: #86909C; ">
-            <el-button style="width: 127px">Cancel</el-button>
+            <el-button @click.prevent="clear" style="width: 127px" >Cancel</el-button>
             <el-button @click.prevent="resetPassword(this.inputNewPassword,this.inputOldPassword)" style="background-color:#4D56E1;color: white ;width: 127px">Save</el-button>
           </div>
 
@@ -119,6 +125,11 @@ export default {
         });
       }
     },
+    clear(){
+      this.inputNewPassword = ''
+      this.inputOldPassword = ''
+      this.inputConfirmPassword = ''
+    },
     getProjectInfo(email) {
       axios({
         method: "patch",
@@ -159,6 +170,30 @@ export default {
       })
     },
     resetPassword(newPassword,currentPassword){
+      if (this.inputOldPassword.length < 8 ||this.inputOldPassword.length >20 ){
+        ElMessage({
+          showClose: true,
+          type: 'error',
+          message: 'Old password digits out of range (8-20)',
+        })
+        return
+      }
+      if (this.inputNewPassword.length < 8 ||this.inputNewPassword.length >20 ){
+        ElMessage({
+          showClose: true,
+          type: 'error',
+          message: 'New password digits out of range (8-20)',
+        })
+        return
+      }
+      if (this.inputConfirmPassword != this.inputNewPassword ){
+        ElMessage({
+          showClose: true,
+          type: 'error',
+          message: 'two enter password not the same',
+        })
+        return
+      }
       axios({
         method: "post",
         url: "http://127.0.0.1:3000/auth/email/reset-password",

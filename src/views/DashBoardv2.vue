@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="na" style=" height: 60px">
+    <div class="na ml-4" style=" height: 60px">
       <div class="na-left" style="height: 60px; width: 50px;float:left;display:flex; align-items:center; justify-content:center;">
         <img src="@/assets/shortLogo.svg">
       </div>
@@ -171,9 +171,14 @@ export default {
 
     },
     watchdate() {
-      this.start = this.date[0].getTime()
-      this.end = this.date[1].getTime()+86400000
-      this.refresh = !this.refresh
+      if (this.date === null) {
+        console.log("null")
+      } else {
+        this.start = this.date[0].getTime()
+        this.end = this.date[1].getTime()+86400000
+        this.refresh = !this.refresh
+      }
+
     },
     testLogin(){
       if (localStorage.getItem("login")==="false") {
@@ -185,6 +190,7 @@ export default {
     },
     changePeriod(time){
       this.start = new Date().getTime() - time*86400000
+      this.end = new Date().getTime(),
       this.refresh = !this.refresh
 
     },

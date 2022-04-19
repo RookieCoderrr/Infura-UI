@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="na" style=" height: 60px">
+    <div class="na ml-4" style=" height: 60px">
       <div class="na-left" style="height: 60px; width: 50px;float:left;display:flex; align-items:center; justify-content:center;">
         <img src="@/assets/shortLogo.svg">
       </div>
@@ -20,8 +20,8 @@
           />
         </el-select>
         <el-button-group class="ml-4">
-          <el-button size="small" style="background-color: white;color: #4D56E1;border-radius: 2px;font-weight: 40">General</el-button>
-          <el-button size="small" @click.prevent="toSetting(this.projectInfo['apikey'])" style="background-color: white;color: #4D56E1;border-radius: 2px;font-weight: 40">Setting</el-button>
+          <el-button size="small"  style="background-color: white; color: #4D56E1; border-radius: 2px; font-weight: 40">General</el-button>
+          <el-button size="small"  @click.prevent="toSetting(this.projectInfo['apikey'])"  style="background-color: white;color: grey;border-radius: 2px;font-weight: 40">Setting</el-button>
         </el-button-group>
       </div>
 
@@ -34,7 +34,7 @@
       </div>
       <div class="row mt-3 " style="">
         <div class="col-6">
-          <el-input v-model="input" placeholder="Please input" clearable />
+          <el-input v-model="input"  show-word-limit maxlength="10" placeholder="Please input" clearable />
         </div>
         <div class="col-4">
           <el-button @click.prevent="changeProjectName(this.projectId)" style="background-color:#4D56E1;color: white ;width: 100px">Save</el-button>
@@ -74,7 +74,7 @@
             Endpoints
           </div>
           <div class="" style="display: inline-block;width: 83%;font-size: 16px;font-weight: 400;font-family: 'PingFang SC';color: #1D2129">
-            https://testnet.explorer.onegate.space/{{ projectInfo['apikey'] }}
+            http://127.0.0.1:1926/{{ projectInfo['apikey'] }}
           </div>
         </div>
         <div class="" style="height:44px;display: flex;align-items: center">
@@ -84,7 +84,7 @@
 
           </div>
           <div class="" style="display: inline-block;width: 83%;font-size: 16px;font-weight: 400;font-family: 'PingFang SC';color: #1D2129">
-            https://explorer.onegate.space/{{ projectInfo['apikey'] }}
+            http://127.0.0.1:1926/{{ projectInfo['apikey'] }}
           </div>
         </div>
       </div>
@@ -129,7 +129,7 @@ export default {
       email:localStorage.getItem("email"),
       projectInfo:{},
       projectId:this.$route.params.projectId,
-      input:123,
+      input:'',
       dialogFormVisible:false,
       projectList:[],
       value:'',
@@ -153,6 +153,7 @@ export default {
   mounted() {
   },
   methods:{
+
     testLogin(){
       if (localStorage.getItem("login")==="false") {
         this.login = false
@@ -265,6 +266,14 @@ export default {
       })
     },
     changeProjectName(apikey){
+      if (this.input.length === 0) {
+        ElMessage({
+          showClose: true,
+          type: 'error',
+          message: 'Project name cannot be empty',
+        })
+        return
+      }
       axios({
         method: "patch",
         url: "http://127.0.0.1:3000/project/update",
@@ -363,4 +372,8 @@ export default {
   }
 };
 </script>
-<style></style>
+<style>
+.btn-sm{
+  color: #8898aa;
+}
+</style>

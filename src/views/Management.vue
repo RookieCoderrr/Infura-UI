@@ -18,7 +18,7 @@
           <img src="@/assets/addButton.png" @click.prevent="dialogFormVisible = true" style="height:30px;cursor: pointer">
 
           <el-dialog v-model="dialogFormVisible" title="Project Name" width="30%">
-                <el-input v-model="projectName" autocomplete="off" />
+                <el-input v-model="projectName" maxlength="10"  show-word-limit autocomplete="off" />
             <template #footer>
       <span class="dialog-footer">
         <el-button @click="dialogFormVisible = false">Cancel</el-button>
@@ -39,9 +39,9 @@
                 <div style="font-family: NucleoIcons;font-style: normal;font-weight: 600;font-size: 26px;height: 60px;display: flex;align-items: center; text-align: left;color:#1D2129 ">
                   <span class="ml-5">{{ item['name'] }}</span>
                 </div>
-               <div style="font-family: NucleoIcons; font-style: normal;font-weight: 400;font-size: 14px;height: 16px;display: flex;align-items: center; text-align: left;color: #4E5969;">
+               <div style="font-family: NucleoIcons; font-style: normal;font-weight: 400;font-size: 14px;height: px;display: flex;align-items: center; text-align: left;color: #4E5969;">
 
-                 <span class="ml-5"> {{ item['date'] }} Created</span>
+                 <span class="ml-5"> {{ item['date'] }} </span>
                </div>
              </div>
              <div class="col-3" style="">

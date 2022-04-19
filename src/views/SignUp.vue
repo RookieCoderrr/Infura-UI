@@ -13,14 +13,14 @@
     </div>
     <div class="col-lg-1"></div>
     <div class="col-lg-5 " >
-      <div class="card  shadow border-0" style="background: rgba(255, 255, 255, 0.1)" >
+      <div class="card  shadow border-0" v-loading="loading"  element-loading-text="Signing up..." style="background: rgba(255, 255, 255, 0.1)" >
         <div class="card-body " style="height: 430px;width: 464px" >
           <div class="LoginTitle" style=" margin-top:20px;margin-left:20px;font-weight: bold; font-size: 24px; color: #4E5969;">
             Sign Up
             <div style="border-bottom:2px solid #4D56E1; margin-top: 16px;width: 140px"></div>
           </div>
           <div class="mt-5"></div>
-          <form role="form" style=" margin-left: 20px; margin-right: 24px">
+          <form role="form"  style=" margin-left: 20px; margin-right: 24px">
             <base-input
               formClasses="input-group-alternative mb-3"
               placeholder="Email address"
@@ -62,6 +62,7 @@ export default {
         email: "",
         password: "",
       },
+      loading:false,
     };
   },
   created() {
@@ -69,6 +70,22 @@ export default {
   },
   methods: {
     signUp(email,password) {
+      if (this.model.password.length <=8 || this.model.password.length >= 20 ) {
+        ElMessage({
+          showClose: true,
+          type: 'error',
+          message: 'Password must be 8-20 digits',
+        })
+        return
+      } if (this.model.email.length === 0) {
+        ElMessage({
+          showClose: true,
+          type: 'error',
+          message: 'Please enter email address',
+        })
+        return
+      }
+      this.loading = true
       axios({
         method: "post",
         url: "http://127.0.0.1:3000/auth/email/register",
@@ -85,6 +102,7 @@ export default {
         console.log(res)
         if (res['data']['success'] === true) {
           console.log(this.model.email)
+          this.loading = false
           this.$router.push({
             name: `sendEmailVerificationSuccess`,
             params:{
@@ -92,18 +110,21 @@ export default {
             }
           });
         } else if (res['data']['success'] === false && res['data']['data']['status'] === 403) {
+          this.loading = false
           ElMessage({
             showClose: true,
             type: 'error',
             message: 'REGISTRATION.USER_ALREADY_REGISTERED',
           })
         } else if (res['data']['success'] === false && res['data']['data']['status'] === 500) {
+          this.loading = false
           ElMessage({
             showClose: true,
             type: 'error',
             message: 'LOGIN.EMAIL_SENDED_RECENTLY',
           })
         } else {
+          this.loading = false
           ElMessage({
             showClose: true,
             type: 'error',
@@ -112,14 +133,17 @@ export default {
         }
       }).catch(function (error) {
         if (error.response && error.response.status === 400) {
+          this.loading = false
           ElMessage({
             showClose: true,
             type: 'error',
             message: 'EMAIL NOT STANDARD OR PASSWORD NOT STANDARD',
           })
         } else if (error.request) {
+          this.loading = false
           console.log(error.request);
         } else {
+          this.loading = false
           console.log('Error', error.message);
         }
       })

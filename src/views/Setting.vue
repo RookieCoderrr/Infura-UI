@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="na" style=" height: 60px">
+    <div class="na ml-4" style=" height: 60px">
       <div class="na-left" style="height: 60px; width: 50px;float:left;display:flex; align-items:center; justify-content:center;">
         <img src="@/assets/shortLogo.svg">
       </div>
@@ -20,7 +20,7 @@
           />
         </el-select>
         <el-button-group class="ml-4">
-          <el-button size="small" @click.prevent="toInfo(this.projectInfo['apikey'])" style="background-color: white;color: #4D56E1;border-radius: 2px;font-weight: 40">General</el-button>
+          <el-button size="small" @click.prevent="toInfo(this.projectInfo['apikey'])" style="background-color: white;color: grey;border-radius: 2px;font-weight: 40">General</el-button>
           <el-button size="small" style="background-color: white;color: #4D56E1;border-radius: 2px;font-weight: 40">Setting</el-button>
         </el-button-group>
       </div>
@@ -49,7 +49,7 @@
             Per Second Requests Rate-limiting
           </div>
           <div class="" style="display: inline-block;width: 30%;">
-            <el-input type="number" v-model.number="inputPerSecond" placeholder="" clearable />
+            <el-input type="number" v-model.number="inputPerSecond"  min="0" max="100" placeholder="0-100" clearable />
           </div>
           <div class="ml-2" style="display: inline-block;width: 44%;">
             <el-button @click.prevent=" setProjectLimitPerSecond(this.projectId)" style="background-color:#4D56E1;color: white ;width: 100px">Save</el-button>
@@ -63,7 +63,7 @@
             Per Day Total Requests
           </div>
           <div class="" style="display: inline-block;width: 30%;">
-            <el-input type="number" v-model.number="inputPerDay" placeholder="" clearable />
+            <el-input type="number" v-model.number="inputPerDay" min="0" max="5000"  placeholder="0-5000" clearable />
           </div>
           <div class="ml-2" style="display: inline-block;width: 44%;">
             <el-button  @click.prevent=" setProjectLimitPerday(this.projectId)" style="background-color:#4D56E1;color: white ;width: 100px">Save</el-button>
@@ -74,19 +74,12 @@
       <div class="row mt-3 ml-2" style="font-weight: 600;font-size: 24px;font-family: 'PingFang SC';font-style: normal;color: #1D2129">
         Allowlists
       </div>
-      <div class=" mt-3 ml-1 pl-4 pt-3 card shadow border-0" style="background-color: rgba(255,255,255,0.5);box-shadow: 0px 5px 30px rgba(77, 86, 225, 0.0);border-radius: 5px;">
-        <div style="">
-          <div style="display: inline-block">
-            <el-button size="small" @click.prevent="changeTab('contract')"  style="background-color: white;color: #4E5969;border-radius: 2px;font-weight: 400;font-family: 'PingFang SC';font-style: normal;font-size: 14px">Contract Address</el-button>
-          </div>
-          <div style="display: inline-block">
-            <el-button size="small"  @click.prevent="changeTab('origin')" label="origin" style="background-color: white;color: #4E5969;border-radius: 2px;font-weight: 400;font-family: 'PingFang SC';font-style: normal;font-size: 14px">Origins</el-button>
-          </div>
-          <div style="display: inline-block">
-            <el-button size="small" @click.prevent="changeTab('apiRequest')" style="background-color: white;color: #4E5969;border-radius: 2px;font-weight: 400;font-family: 'PingFang SC';font-style: normal;font-size: 14px">Api Request Method</el-button>
-          </div>
-
-        </div>
+      <div class=" mt-3 ml-1 pl-4 pt-3 pb-3 card shadow border-0" style="background-color: rgba(255,255,255,0.5);box-shadow: 0px 5px 30px rgba(77, 86, 225, 0.0);border-radius: 5px;">
+        <el-radio-group v-model="showRecord" style="margin-bottom: 10px" fill="#4D56E1">
+          <el-radio-button label="contract"  >Contract Address</el-radio-button>
+          <el-radio-button label="origin"  >Origins</el-radio-button>
+          <el-radio-button label="apiRequest"  >Api Request Method</el-radio-button>
+        </el-radio-group>
         <div v-if="this.showRecord==='apiRequest'" class="mt-2 mb-2"   style="display: flex;align-items: center;">
           <div  class="" style="display: inline-block;width: 56%;">
             <el-select
@@ -108,7 +101,7 @@
         </div>
         <div v-if="this.showRecord==='contract'" class="mt-2 mb-2"   style="display: flex;align-items: center;">
           <div class="" style="display: inline-block;width: 56%;">
-            <el-input v-model="inputContract" placeholder="" clearable />
+            <el-input v-model="inputContract" placeholder="eg: 0xcd10d9f697230b04d9ebb8594a1ffe18fa95d9ad"  maxlength="42"  show-word-limit  clearable />
           </div>
           <div class="ml-2" style="display: inline-block;width: 44%;">
             <el-button @click.prevent="addProjectContract(this.projectId)" style="background-color:#4D56E1;color: white ;width: 100px">Add</el-button>
@@ -116,14 +109,14 @@
         </div>
         <div v-if="this.showRecord==='origin'" class="mt-2 mb-2"   style="display: flex;align-items: center;">
           <div class="" style="display: inline-block;width: 56%;">
-            <el-input v-model="inputOrigin" placeholder="" clearable />
+            <el-input v-model="inputOrigin" placeholder="eg: 127.0.0.1" clearable />
           </div>
           <div class="ml-2" style="display: inline-block;width: 44%;">
             <el-button @click.prevent="addProjectOrigin(this.projectId)" style="background-color:#4D56E1;color: white ;width: 100px">Add</el-button>
           </div>
         </div>
         <div v-if="this.showRecord==='contract'">
-          <div class="mt-2 mb-2" v-for="(param, ind) in allowContract"
+          <div class="" v-for="(param, ind) in allowContract"
                :key="ind" style="display: flex;align-items: center;">
             <div class="" style="display: inline-block; font-family: 'PingFang SC';font-style: normal;font-weight: 400;font-size: 14px;color:#4E5969 " >
               {{ param }}
@@ -135,7 +128,7 @@
           </div>
         </div>
         <div v-if="this.showRecord==='origin'">
-          <div class="mt-2 mb-2" v-for="(param, ind) in origins"
+          <div class="" v-for="(param, ind) in origins"
                :key="ind" style="display: flex;align-items: center;">
             <div class="" style="display: inline-block; font-family: 'PingFang SC';font-style: normal;font-weight: 400;font-size: 14px;color:#4E5969 " >
               {{ param }}
@@ -148,7 +141,7 @@
 
         </div>
         <div v-if="this.showRecord==='apiRequest'">
-          <div class="mt-2 mb-2" v-for="(param, ind) in apiRequest"
+          <div class=" " v-for="(param, ind) in apiRequest"
                :key="ind" style="display: flex;align-items: center;">
             <div class="" style="display: inline-block; font-family: 'PingFang SC';font-style: normal;font-weight: 400;font-size: 14px;color:#4E5969 " >
               {{ param }}
@@ -182,21 +175,71 @@ export default {
       value1:'',
       options:[
         {
-          value:'getBlockCount',
-          label:'getBlockCount'
+          value:'GetActiveAddresses',
+          label:'GetActiveAddresses'
         },{
-          value:'getBlockInfoByBlockHash',
-          label:'getBlockInfoByBlockHash'
+          value:'GetAddressByAddress',
+          label:'GetAddressByAddress'
         },{
-          value:'getCommittee',
-          label:'getCommittee'
+          value:'GetAddressCount',
+          label:'GetAddressCount'
         },{
-          value:'getAccount',
-          label:'getAccount'
+          value:'GetAddressInfoByAddress',
+          label:'GetAddressInfoByAddress'
         },{
-          value:'getContractHash',
-          label:'getContractHash'
-        }
+          value:'GetAddressList',
+          label:'GetAddressList'
+        },
+        {
+          value:'GetApplicationLogByBlockHash',
+          label:'GetApplicationLogByBlockHash'
+        },
+        {
+          value:'GetApplicationLogByTransactionHash',
+          label:'GetApplicationLogByTransactionHash'
+        },
+        {
+          value:'GetAssetCount',
+          label:'GetAssetCount'
+        },
+        {
+          value:'GetAssetHoldersByContractHash',
+          label:'GetAssetHoldersByContractHash'
+        },
+        {
+          value:'GetAssetHoldersListByContractHash',
+          label:'GetAssetHoldersListByContractHash'
+        },
+        {
+          value:'GetAssetInfoByContractHash',
+          label:'GetAssetInfoByContractHash'
+        },
+        {
+          value:'GetAssetInfos',
+          label:'GetAssetInfos'
+        },
+        {
+          value:'GetAssetInfosByName',
+          label:'GetAssetInfosByName'
+        },
+        {
+          value:'GetAssetsHeldByAddress',
+          label:'GetAssetsHeldByAddress'
+        },{
+          value:'GetAssetsHeldByContractHashAddress',
+          label:'GetAssetsHeldByContractHashAddress'
+        },{
+          value:'GetBalanceByContractHashAddress',
+          label:'GetBalanceByContractHashAddress'
+        },{
+          value:'GetBestBlockHash',
+          label:'GetBestBlockHash'
+        },
+
+
+
+
+
       ],
       projectList:[],
       value:'',
@@ -210,6 +253,7 @@ export default {
       inputApiRequest:'',
       allowContract:[],
       login:true,
+      isHashPattern: /^((0x)?)([0-9a-f]{40})$/,
     };
   },
   created() {
@@ -240,6 +284,25 @@ export default {
         this.getProjectInfoByProjectId(this.projectId)
       }
 
+    },
+   chooseButton(command){
+      switch (command){
+        case 'contract':
+          console.log('Contract')
+          return {
+            background:"#4D56E1"
+          }
+        case 'origin':
+          console.log('origin')
+          return {
+            background:"#4D56E1"
+          }
+        case 'apiRequest':
+          console.log('apiRequest')
+          return {
+            background:"#4D56E1"
+          }
+      }
     },
     setProjectSecret() {
         axios({
@@ -277,6 +340,7 @@ export default {
     },
     changeTab(value) {
       this.showRecord = value
+
     },
     toInfo(projectId){
       this.$router.push({
@@ -380,6 +444,14 @@ export default {
       })
     },
     setProjectLimitPerday(apiKey){
+      if (this.inputPerDay < 0 || this.inputPerDay > 5000) {
+        ElMessage({
+          showClose: true,
+          type: 'error',
+          message: 'Limit per day range is 0- 5000 ',
+        })
+        return
+      }
       axios({
         method: "patch",
         url: "http://127.0.0.1:3000/project/limitPerday",
@@ -409,6 +481,14 @@ export default {
 
     },
     setProjectLimitPerSecond(apiKey){
+      if (this.inputPerSecond < 0 || this.inputPerSecond > 100) {
+        ElMessage({
+          showClose: true,
+          type: 'error',
+          message: 'Limit per second range is 0- 100 ',
+        })
+        return
+      }
       axios({
         method: "patch",
         url: "http://127.0.0.1:3000/project/limitPerSecond",
@@ -438,6 +518,14 @@ export default {
 
     },
     addProjectContract(apiKey){
+      if (!this.isHashPattern.test(this.inputContract)) {
+        ElMessage({
+          showClose: true,
+          type: 'error',
+          message: 'Please enter standard contract hash',
+        })
+        return
+      }
       axios({
         method: "patch",
         url: "http://127.0.0.1:3000/project/allowContract",
@@ -462,7 +550,15 @@ export default {
             type: 'success',
             message: 'set project allow contract successfully',
           })
+        } else {
+          console.log(res)
+          ElMessage({
+            showClose: true,
+            type: 'error',
+            message: res['data']['data']['message'],
+          })
         }
+
       })
 
     },
@@ -490,6 +586,14 @@ export default {
             showClose: true,
             type: 'success',
             message: 'set project apiRequest successfully',
+          })
+        }
+        else {
+          console.log(res)
+          ElMessage({
+            showClose: true,
+            type: 'error',
+            message: res['data']['data']['message'],
           })
         }
       })
@@ -521,6 +625,14 @@ export default {
             message: 'set project origin successfully',
           })
         }
+        else {
+          console.log(res)
+          ElMessage({
+            showClose: true,
+            type: 'error',
+            message: res['data']['data']['message'],
+          })
+        }
       })
 
     },
@@ -548,6 +660,14 @@ export default {
             showClose: true,
             type: 'success',
             message: 'delete project allow contract successfully',
+          })
+        }
+        else {
+          console.log(res)
+          ElMessage({
+            showClose: true,
+            type: 'error',
+            message: res['data']['data']['message'],
           })
         }
       })
@@ -579,6 +699,14 @@ export default {
             message: 'delete project origin successfully',
           })
         }
+        else {
+          console.log(res)
+          ElMessage({
+            showClose: true,
+            type: 'error',
+            message: res['data']['data']['message'],
+          })
+        }
       })
 
     },
@@ -608,6 +736,14 @@ export default {
             message: 'delete project apiMethod successfully',
           })
         }
+        else {
+          console.log(res)
+          ElMessage({
+            showClose: true,
+            type: 'error',
+            message: res['data']['data']['message'],
+          })
+        }
       })
 
     },
@@ -615,4 +751,5 @@ export default {
   },
 };
 </script>
-<style></style>
+<style>
+</style>

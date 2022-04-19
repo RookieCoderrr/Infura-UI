@@ -13,7 +13,7 @@
     </div>
     <div class="col-lg-1"></div>
     <div class="col-lg-5 " >
-      <div class="card  shadow border-0" style="background: rgba(255, 255, 255, 0.1)" >
+      <div class="card  shadow border-0"  v-loading="loading"  element-loading-text="Logging in..." style="background: rgba(255, 255, 255, 0.1)" >
         <div class="card-body " style="height: 540px;width: 464px" >
           <div class="LoginTitle" style=" margin-top:20px;margin-left:20px;font-weight: bold; font-size: 24px; color: #4E5969;">
             Email Login
@@ -22,15 +22,17 @@
           <div class="mt-5"></div>
           <form role="form" style=" margin-left: 20px; margin-right: 24px">
             <base-input
+                id="email"
               formClasses="input-group-alternative mb-3"
               placeholder="Email address"
               addon-left-icon="ni ni-email-83"
               v-model="model.email"
-              style="height: 50px"
+              style="height: 50px;"
             >
             </base-input>
             <div class="mt-4"></div>
             <base-input
+                id ="password"
               formClasses="input-group-alternative mb-3"
               placeholder="Password"
               type="password"
@@ -76,6 +78,7 @@ export default {
         login :"false",
       },
       checked:false,
+      loading:false,
     };
   },
   mounted() {
@@ -94,6 +97,22 @@ export default {
   },
   methods: {
     login(email,password) {
+      if (this.model.password.length <=8 || this.model.password.length >= 20 ) {
+        ElMessage({
+          showClose: true,
+          type: 'error',
+          message: 'Password must be 8-20 digits',
+        })
+        return
+      } if (this.model.email.length === 0) {
+        ElMessage({
+          showClose: true,
+          type: 'error',
+          message: 'Please enter email address',
+        })
+        return
+      }
+      this.loading = true
       axios({
         method: "post",
         url: "/api/auth/email/login",
@@ -123,28 +142,33 @@ export default {
            let email = res['data']['data']['user']['email']
            localStorage.setItem("token",token)
            localStorage.setItem("email",email)
+           this.loading =false
            this.$router.push({
              path: `/management`,
            });
          } else if (res['data']['success'] === false && res['data']['data']['status'] === 403) {
+           this.loading =false
            ElMessage({
              showClose: true,
              type: 'error',
              message: 'LOGIN.EMAIL_NOT_VERIFIED',
            })
          }else if (res['data']['success'] === false && res['data']['data']['status'] === 401) {
+           this.loading =false
            ElMessage({
              showClose: true,
              type: 'error',
              message: 'LOGIN.PASSWORD_NOT_VALID',
            })
          } else if (res['data']['success'] === false && res['data']['data']['status'] === 404) {
+           this.loading =false
            ElMessage({
              showClose: true,
              type: 'error',
              message: 'LOGIN.USER_NOT_FOUND',
            })
          } else {
+           this.loading =false
            ElMessage({
              showClose: true,
              type: 'error',
@@ -152,15 +176,19 @@ export default {
            })
          }
       }).catch(function (error) {
+
         if (error.response && error.response.status === 400) {
+          this.loading =false
           ElMessage({
             showClose: true,
             type: 'error',
             message: 'EMAIL NOT STANDARD',
           })
         } else if (error.request) {
+          this.loading =false
           console.log(error.request);
         } else {
+          this.loading =false
           console.log('Error', error.message);
         }
       })
@@ -176,4 +204,5 @@ export default {
   }
 };
 </script>
-<style></style>
+<style>
+</style>

@@ -24,6 +24,7 @@ import Setting from "@/views/Setting";
 import Account from "@/views/account";
 import Bill from "@/views/bill";
 import Logout from "@/views/logout";
+import Plan from "@/views/plan"
 
 const routes = [
   {
@@ -137,6 +138,11 @@ const routes = [
         path: "/logout",
         name: "logout",
         components: { default: Logout },
+      },
+      {
+        path: "/plan",
+        name: "plan",
+        components: { default: Plan },
       },
     ],
   },

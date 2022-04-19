@@ -156,6 +156,23 @@ export default {
       });
     },
     resetPassword(email,newPassword,newPasswordToken){
+      if (this.model.password.length <=8 || this.model.password.length >= 20 ) {
+        ElMessage({
+          showClose: true,
+          type: 'error',
+          message: 'Password must be 8-20 digits',
+        })
+        return
+      }
+      if (this.model.password !== this.model.newPassWord ) {
+        ElMessage({
+          showClose: true,
+          type: 'error',
+          message: 'Password entries must be the same',
+        })
+        return
+      }
+
       axios({
         method: "post",
         url: "http://127.0.0.1:3000/auth/email/reset-password",
