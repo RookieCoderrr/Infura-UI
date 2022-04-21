@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="na ml-4" style=" height: 60px">
-      <div class="na-left" style="height: 60px; width: 50px;float:left;display:flex; align-items:center; justify-content:center;">
+    <div class="na " style=" height: 60px;background-color: white;box-shadow:0px 5px 30px rgba(77, 86, 225, 0.05);">
+      <div class="na-left ml-4" style="height: 60px; width: 50px;float:left;display:flex; align-items:center; justify-content:center;">
         <img src="@/assets/shortLogo.svg">
       </div>
       <div class="" style="height: 60px; float:left; margin-left: 0px;display:flex; align-items:center;font-family: 'PingFang SC';font-style: normal;font-weight: 500;font-size: 14px;color: #1D2129" >
@@ -9,7 +9,7 @@
       </div>
     </div>
     <div style="margin:0;padding:0; width:100%;height:1px;background-color:whitesmoke;overflow:hidden;"></div>
-    <div v-if="this.$route.params.projectId !== 'Noprojects'" class="option" style="height: 45px;">
+    <div v-if="this.$route.params.projectId !== 'Noprojects'" class="option mt-2" style="height: 45px;">
       <div class="left" style="height: 45px; width: 25%;;display: inline-block;text-align:center;justify-content: center;align-items: center">
         <el-select v-model="netValue"  @change="changeNet(netValue,projectValue)"  class="ml-4" placeholder="Select" size="small" style="background-color: white;width: 100px; color:#4D56E1;border-radius: 2px;font-weight: 40 ;font-family:'PingFang SC';font-style: normal;font-size: 14px">
           <el-option
@@ -54,7 +54,7 @@
 
 
     <div v-if="this.$route.params.projectId !== 'Noprojects'" class="container-fluid">
-      <div class="row mt-3 mb-3 ml-2" style="font-weight: 600;font-size: 24px;font-family: 'PingFang SC';font-style: normal;color: #1D2129">
+      <div class="row mt-2 mb-3 ml-2" style="font-weight: 600;font-size: 24px;font-family: 'PingFang SC';font-style: normal;color: #1D2129">
        Request Volume
       </div>
       <div class="row">
@@ -66,15 +66,22 @@
       </div>
     </div>
     <div v-if="this.$route.params.projectId == 'Noprojects'" class="container-fluid">
-      <div class="row mt-3 mb-3 ml-2" style="font-weight: 600;font-size: 24px;font-family: 'PingFang SC';font-style: normal;color: #1D2129">
-        Request Volume
-      </div>
       <div class="row">
         <div class="col">
-          <div class="card shadow border-0">
-            <div>
-              No Magnet projects available
+          <div  style="width: 100%;height: 700px;display: flex;justify-content: center;align-items: center">
+            <div style="width: 50%;">
+              <div class="mb-2" style="margin-left: 50%">
+                <img src="@/assets/magnet.png">
+              </div>
+              <div style="text-align: center;font-size: 1.25rem;line-height: 1.75rem;padding-bottom: 1rem;font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace">
+                You don’t have any projects yet
+              </div>
+              <div style="text-align: center ;font-size: 0.9rem; color:grey;line-height: 1.75rem;padding-bottom: 1rem;font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace">
+                To start using Magnet, create a project to access your API keys.
+              </div>
             </div>
+
+
           </div>
         </div>
       </div>
@@ -164,8 +171,10 @@ export default {
       if(this.$route.name==="dashboardv2") {
         this.testLogin()
         if (this.login) {
+          console.log(this.netValue,this.projectValue)
           this.getProjectInfo(this.email)
           this.refresh = !this.refresh
+          console.log(this.refresh)
         }
       }
 
@@ -206,7 +215,7 @@ export default {
     getProjectInfo(email) {
       axios({
         method: "patch",
-        url: "http://127.0.0.1:3000/project/list",
+        url: "/api/project/list",
         headers: {
           "Content-Type": "application/json",
           withCredentials: " true",
@@ -244,7 +253,7 @@ export default {
     getProjectStatic(email,apikey,net,start,end) {
       axios({
         method: "patch",
-        url: "http://127.0.0.1:3000/project/rpcRecords",
+        url: "/api/project/rpcRecords",
         headers: {
           "Content-Type": "application/json",
           withCredentials: " true",

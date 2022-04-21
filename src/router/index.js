@@ -3,14 +3,9 @@ import { createRouter, createWebHistory } from "vue-router";
 import DashboardLayout from "@/layout/DashboardLayout";
 import AuthLayout from "@/layout/AuthLayout";
 
-import Dashboard from "../views/Dashboard.vue";
-import Icons from "../views/Icons.vue";
 import DashBoardv2 from "../views/DashBoardv2.vue";
-import Profile from "../views/UserProfile.vue";
-import Tables from "../views/Tables.vue";
 
 import Login from "../views/Login.vue";
-import Register from "../views/Register.vue";
 import ForgotPassword from "../views/ForgotPassword"
 import SendForgotPasswordSuccess from "../views/SendForgotPasswordSuccess";
 import SetNewPassword from "../views/SetNewPassword";
@@ -38,11 +33,6 @@ const routes = [
         components: { default: Login },
       },
       {
-        path: "/register",
-        name: "register",
-        components: { default: Register },
-      },
-      {
         path: "/forgotPassword",
         name: "forgotPassword",
         components: { default: ForgotPassword },
@@ -68,7 +58,7 @@ const routes = [
         components: { default: SignUp },
       },
       {
-        path: "/sendEmailVerificationSuccess",
+        path: "/sendEmailVerificationSuccess/:email",
         name: "sendEmailVerificationSuccess",
         components: { default: SendEmailVerificationSuccess },
       },
@@ -84,30 +74,11 @@ const routes = [
     redirect: "/dashboardv2",
     component: DashboardLayout,
     children: [
-      {
-        path: "/dashboard",
-        name: "dashboard",
-        components: { default: Dashboard },
-      },
-      {
-        path: "/icons",
-        name: "icons",
-        components: { default: Icons },
-      },
+
       {
         path: "/dashboardv2/:net/:projectId",
         name: "dashboardv2",
         components: { default: DashBoardv2 },
-      },
-      {
-        path: "/profile",
-        name: "profile",
-        components: { default: Profile },
-      },
-      {
-        path: "/tables",
-        name: "tables",
-        components: { default: Tables },
       },
       {
         path: "/management",

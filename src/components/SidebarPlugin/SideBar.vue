@@ -2,7 +2,7 @@
   <nav
     class="navbar navbar-vertical fixed-left navbar-expand-md navbar-light "
     id="sidenav-main"
-    style="background-color:#4D56E1;box-shadow: 4px 0px 10px 0px rgba(77, 86, 225, 0.3);width: 250px;
+    style="background-color:#4D56E1;width: 250px;
 "
   >
     <div class="container-fluid">
@@ -40,68 +40,6 @@
       <div class="mt-2" style="font-size: 15px;font-weight: 400; font-style: normal; font-family: 'PingFang SC'; color: white ">
         {{ this.omitEmailStr}}
       </div>
-      <slot name="mobile-right">
-        <ul class="nav align-items-center d-md-none">
-          <base-dropdown class="nav-item" position="right">
-            <template v-slot:title>
-              <a
-                class="nav-link nav-link-icon"
-                href="#"
-                role="button"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                <i class="ni ni-bell-55"></i>
-              </a>
-            </template>
-
-            <a class="dropdown-item" href="#">Action</a>
-            <a class="dropdown-item" href="#">Another action</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">Something else here</a>
-          </base-dropdown>
-          <base-dropdown class="nav-item" position="right">
-            <template v-slot:title>
-              <a class="nav-link" href="#" role="button">
-                <div class="media align-items-center">
-                  <span class="avatar avatar-sm rounded-circle">
-                    <img
-                      alt="Image placeholder"
-                      src="img/theme/team-1-800x800.jpg"
-                    />
-                  </span>
-                </div>
-              </a>
-            </template>
-
-            <div class="dropdown-header noti-title">
-              <h6 class="text-overflow m-0">Welcome!</h6>
-            </div>
-            <router-link to="/profile" class="dropdown-item">
-              <i class="ni ni-single-02"></i>
-              <span>My profile</span>
-            </router-link>
-            <router-link to="/profile" class="dropdown-item">
-              <i class="ni ni-settings-gear-65"></i>
-              <span>Settings</span>
-            </router-link>
-            <router-link to="/profile" class="dropdown-item">
-              <i class="ni ni-calendar-grid-58"></i>
-              <span>Activity</span>
-            </router-link>
-            <router-link to="/profile" class="dropdown-item">
-              <i class="ni ni-support-16"></i>
-              <span>Support</span>
-            </router-link>
-            <div class="dropdown-divider"></div>
-            <a href="#!" class="dropdown-item">
-              <i class="ni ni-user-run"></i>
-              <span>Logout</span>
-            </a>
-          </base-dropdown>
-        </ul>
-      </slot>
       <slot></slot>
       <div
         v-show="$sidebar.showSidebar"
@@ -378,7 +316,7 @@ export default {
     omitEmail(email){
       let ipos = email.indexOf("@")
       let str2 = email.substring(ipos+1,email.length);
-      let first = email.substring(0,1)
+      let first = email.substring(0,3)
       let last = email.substring(ipos-1,ipos)
       return first+"......"+last+"@"+str2
     },
@@ -414,7 +352,7 @@ export default {
     getProject(email) {
       axios({
         method: "patch",
-        url: "http://127.0.0.1:3000/project/list",
+        url: "/api/project/list",
         headers: {
           "Content-Type": "application/json",
           withCredentials: " true",
@@ -476,7 +414,7 @@ export default {
     getProjectInfo(email) {
       axios({
         method: "patch",
-        url: "http://127.0.0.1:3000/project/list",
+        url: "/api/project/list",
         headers: {
           "Content-Type": "application/json",
           withCredentials: " true",
@@ -533,12 +471,11 @@ export default {
     getUserInfo(email) {
       axios({
         method: "get",
-        url: "http://127.0.0.1:3000/users/user/"+email,
+        url: "/api/users/user/"+email,
         headers: {
           "Content-Type": "application/json",
           withCredentials: " true",
           crossDomain: "true",
-          'Authorization':'Bearer ' + localStorage.getItem("token")
         },
       }).then((res) => {
         // console.log(res)
@@ -571,7 +508,7 @@ export default {
     setUserNickName(email,name) {
       axios({
         method: "patch",
-        url: "http://127.0.0.1:3000/users/updateNickName/",
+        url: "/api/users/updateNickName/",
         headers: {
           "Content-Type": "application/json",
           withCredentials: " true",

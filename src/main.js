@@ -21,9 +21,11 @@ import router from "./router";
 import ArgonDashboard from "./plugins/argon-dashboard";
 import "element-plus/lib/theme-chalk/index.css";
 import ElementPlus from "element-plus"
+import VueClipboard from 'vue-clipboard2'
 
 const appInstance = createApp(App);
 appInstance.use(router);
 appInstance.use(ArgonDashboard);
 appInstance.use(ElementPlus);
+appInstance.use(VueClipboard);
 appInstance.mount("#app");

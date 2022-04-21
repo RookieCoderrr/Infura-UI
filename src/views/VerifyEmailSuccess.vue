@@ -40,7 +40,7 @@
         </div>
         <div v-else class="card-body " style="height: 350px;width: 464px" >
           <div class="mt-3" style="text-align: center" >
-            <img src="@/assets/success.png" style="width: 60px;height: 60px">
+            <i class="el-icon-error" style="width: 60px;height: 60px"/>
           </div>
 
           <div class="mt-2" style="text-align: center">
@@ -57,7 +57,7 @@
           <div class="mt-2"></div>
           <form role="form" style=" margin-left: 20px; margin-right: 24px">
             <div class="text-center mt-4">
-              <button @click.prevent="toLogin()" type="primary" class="my-4 " style="width: 99% ;height: 50px; background-color: #4D56E1;border-radius:5px;border: none;color: white;font-weight: 700;font-size: 16px;font-style: normal">Get Start</button>
+              <button @click.prevent="toLogin()" type="primary" class="my-4 " style="width: 99% ;height: 50px; background-color: #4D56E1;border-radius:5px;border: none;color: white;font-weight: 700;font-size: 16px;font-style: normal">Back</button>
             </div>
 
           </form>
@@ -75,7 +75,7 @@ export default {
   name: "login",
   data() {
     return {
-     success:false,
+     success:true,
     };
   },
   created() {
@@ -86,7 +86,7 @@ export default {
     verifyEmailToken(token) {
       axios({
         method: "get",
-        url: "http://127.0.0.1:3000/auth/email/verifyLogin/"+token,
+        url: "/api/auth/email/verifyLogin/"+token,
         headers: {
           "Content-Type": "application/json",
           withCredentials: " true",

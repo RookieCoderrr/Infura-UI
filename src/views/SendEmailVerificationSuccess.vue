@@ -37,7 +37,7 @@
           <div class="mt-2"></div>
           <form role="form" style=" margin-left: 20px; margin-right: 24px">
             <div class="text-center mt-4">
-              <button @click.prevent="reSend(this.email)" type="primary" class="my-4 " style="width: 99% ;height: 50px; background-color: #4D56E1;border-radius:5px;border: none;color: white;font-weight: 700;font-size: 16px;font-style: normal">Resend</button>
+              <button @click.prevent="getUserInfo(this.email)" type="primary" class="my-4 " style="width: 99% ;height: 50px; background-color: #4D56E1;border-radius:5px;border: none;color: white;font-weight: 700;font-size: 16px;font-style: normal">Resend</button>
             </div>
 
           </form>
@@ -55,7 +55,8 @@ export default {
   name: "login",
   data() {
     return {
-      email:''
+      email:this.$route.params.email,
+      auth:true,
     };
   },
   created() {
@@ -68,10 +69,60 @@ export default {
       this.email = this.$route.params.email
       console.log('email', this.email)
     },
+    getUserInfo(email) {
+      axios({
+        method: "get",
+        url: "/api/users/user/"+email,
+        headers: {
+          "Content-Type": "application/json",
+          withCredentials: " true",
+          crossDomain: "true",
+        },
+      }).then((res) => {
+        // console.log(res)
+        if (res['data']['success'] === true) {
+          this.auth = res['data']['data']['auth']
+          console.log(this.auth)
+          if (this.auth === false) {
+            this.reSend(email)
+          } else {
+            ElMessage({
+              showClose: true,
+              type: 'error',
+              message: 'REGISTER EMAIL HAS BEEN VERIFIED',
+            })
+            this.$router.push({
+              path: `/login`,
+            });
+          }
+
+        }
+      }).catch((error) => {
+        if (error.response && error.response.status === 401) {
+          ElMessage({
+            showClose: true,
+            type: 'error',
+            message: 'JWT TIME OUT',
+          })
+          console.log("oh no")
+          localStorage.setItem("login","false")
+          this.$router.push({
+            path: `login`,
+
+          });
+
+        } else if (error.request) {
+          console.log(error.request);
+          this.success = false
+        } else {
+          console.log('Error', error.message);
+        }
+      })
+    },
     reSend(email) {
       axios({
         method: "get",
-        url: "http://127.0.0.1:3000/auth/email/resend-verification/register/"+email,
+        url: "/api/auth/email/resend-verification/register/"+email,
         headers: {
           "Content-Type": "application/json",
           withCredentials: " true",

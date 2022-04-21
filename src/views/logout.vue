@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="na ml-4" style=" height: 60px">
-      <div class="na-left" style="height: 60px; width: 50px;float:left;display:flex; align-items:center; justify-content:center;">
+    <div class="na " style=" height: 60px;background-color: white;;box-shadow:0px 5px 30px rgba(77, 86, 225, 0.05);">
+      <div class="na-left ml-4" style="height: 60px; width: 50px;float:left;display:flex; align-items:center; justify-content:center;">
         <img src="@/assets/shortLogo.svg">
       </div>
       <div class="" style="height: 60px; float:left; margin-left: 0px;display:flex; align-items:center;font-family: 'PingFang SC';font-style: normal;font-weight: 500;font-size: 14px;color: #1D2129" >
@@ -41,7 +41,7 @@ export default {
     getProjectInfo(email) {
       axios({
         method: "patch",
-        url: "http://127.0.0.1:3000/project/list",
+        url: "/api/project/list",
         headers: {
           "Content-Type": "application/json",
           withCredentials: " true",

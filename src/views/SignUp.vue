@@ -104,10 +104,7 @@ export default {
           console.log(this.model.email)
           this.loading = false
           this.$router.push({
-            name: `sendEmailVerificationSuccess`,
-            params:{
-              email:this.model.email,
-            }
+            path: `/sendEmailVerificationSuccess/${this.model.email}`
           });
         } else if (res['data']['success'] === false && res['data']['data']['status'] === 403) {
           this.loading = false

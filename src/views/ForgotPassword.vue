@@ -62,7 +62,7 @@ export default {
       this.loading = true
       axios({
         method: "get",
-        url: "http://127.0.0.1:3000/auth/email/forgot-password/"+email,
+        url: "/api/auth/email/forgot-password/"+email,
         headers: {
           "Content-Type": "application/json",
           withCredentials: " true",

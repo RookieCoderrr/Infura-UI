@@ -42,11 +42,13 @@ export default {
 
         var sdata = new Array(day)
 
-       getProjectStatics(this.email,this.apikey,this.net,this.start,this.end)
-
         for (var m = -day+1; m <= 0 ; m ++) {
           xdata.push(getDay(m))
         }
+
+       getProjectStatics(this.email,this.apikey,this.net,this.start,this.end)
+
+
         function getDay(day){
           var today = new Date();
           var todayMilliseconds = today.getTime() + 1000 * 60 * 60 *24 * day;
@@ -58,8 +60,8 @@ export default {
           return tMonth+" " +tDate;
         }
         function computeDays (start, end){
-          // console.log( Math.ceil((end-start) / 86400000))
           return Math.ceil((end-start) / 86400000)
+
         }
 
         function doHandleMonth(month){
@@ -69,16 +71,17 @@ export default {
           }
           return m;
         }
-        function refreshData(Data,index){
-          var option =myChart.getOption()
+        function refreshData(Data,index,option){
+          myChart.clear();
           option.series[index].data = Data
+          document.getElementById('mainAddress').setAttribute('_echarts_instance_', '');
           myChart.setOption(option)
         }
 
         function getProjectStatics(email, apikey, net, start ,end ){
           axios({
             method: "patch",
-            url: "http://127.0.0.1:3000/project/rpcRecords",
+            url: "/api/project/rpcRecords",
             data: {
               email: email,
               apikey:apikey,
@@ -93,13 +96,11 @@ export default {
               'Authorization':'Bearer ' + localStorage.getItem("token")
             },
           }).then((res) => {
-            console.log(res)
             // console.log(res)
-            // console.log(res["data"]["data"]['statics'].length)
             for (var j = 0; j < res["data"]["data"]['statics'].length; j ++) {
               sdata[j]=res["data"]["data"]['statics'][j]
-              refreshData(sdata,0)
             }
+            refreshData(sdata,0,option)
 
           });
         }
@@ -171,13 +172,13 @@ export default {
           ]
         };
         // 使用刚指定的配置项和数据显示图表。
-        myChart.setOption(option);
-
-        window.addEventListener("resize", function () {
-
-          myChart.resize()
-          myChart.setOption(option)
-        })
+        // myChart.setOption(option);
+        //
+        // window.addEventListener("resize", function () {
+        //
+        //   myChart.resize()
+        //   myChart.setOption(option)
+        // })
       }
 
       //onMounted

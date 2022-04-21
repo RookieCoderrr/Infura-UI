@@ -102,7 +102,7 @@ export default {
     verifyForgotPasswordToken(token) {
       axios({
         method: "get",
-        url: "http://127.0.0.1:3000/auth/email/verifyForgotPassword/"+token,
+        url: "/api/auth/email/verifyForgotPassword/"+token,
         headers: {
           "Content-Type": "application/json",
           withCredentials: " true",
@@ -175,7 +175,7 @@ export default {
 
       axios({
         method: "post",
-        url: "http://127.0.0.1:3000/auth/email/reset-password",
+        url: "/api/auth/email/reset-password",
         headers: {
           "Content-Type": "application/json",
           withCredentials: " true",

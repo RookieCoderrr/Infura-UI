@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="na ml-4" style=" height: 60px">
-      <div class="na-left" style="height: 60px; width: 50px;float:left;display:flex; align-items:center; justify-content:center;">
+    <div class="na " style=" height: 60px;background-color: white;;box-shadow:0px 5px 30px rgba(77, 86, 225, 0.05);">
+      <div class="na-left ml-4" style="height: 60px; width: 50px;float:left;display:flex; align-items:center; justify-content:center;">
         <img src="@/assets/shortLogo.svg">
       </div>
       <div class="" style="height: 60px; float:left; margin-left: 0px;display:flex; align-items:center;font-family: 'PingFang SC';font-style: normal;font-weight: 500;font-size: 14px;color: #1D2129" >
@@ -9,153 +9,156 @@
       </div>
     </div>
     <div style="margin:0;padding:0; width:100%;height:2px;background-color:whitesmoke;overflow:hidden;"></div>
-    <div class="option mt-2" style="height: 45px;">
-      <div class="left" style="height: 45px; width: 400px;float:left;display: flex;justify-content:center;align-items: center">
-        <el-select v-model="value"  @change="selectProject(value)"  class="ml-4" placeholder="Select" size="small" style="background-color: white;color:#4D56E1;border-radius: 2px;font-weight: 40 ;font-family:'PingFang SC';font-style: normal;font-size: 14px">
-          <el-option
-              v-for="item in projectList"
-              :key="item.name"
-              :label="item.name"
-              :value="item.apikey"
-          />
-        </el-select>
-        <el-button-group class="ml-4">
-          <el-button size="small" @click.prevent="toInfo(this.projectInfo['apikey'])" style="background-color: white;color: grey;border-radius: 2px;font-weight: 40">General</el-button>
-          <el-button size="small" style="background-color: white;color: #4D56E1;border-radius: 2px;font-weight: 40">Setting</el-button>
-        </el-button-group>
+    <div v-loading="loading"  element-loading-text="Loading setting...">
+      <div class="option mt-2" style="height: 45px;">
+        <div class="left" style="height: 45px; width: 400px;float:left;display: flex;justify-content:center;align-items: center">
+          <el-select v-model="value"  @change="selectProject(value)"  class="ml-4" placeholder="Select" size="small" style="background-color: white;color:#4D56E1;border-radius: 2px;font-weight: 40 ;font-family:'PingFang SC';font-style: normal;font-size: 14px">
+            <el-option
+                v-for="item in projectList"
+                :key="item.name"
+                :label="item.name"
+                :value="item.apikey"
+            />
+          </el-select>
+          <el-button-group class="ml-4">
+            <el-button size="small" @click.prevent="toInfo(this.projectInfo['apikey'])" style="background-color: white;color: grey;border-radius: 2px;font-weight: 40">General</el-button>
+            <el-button size="small" style="background-color: white;color: #4D56E1;border-radius: 2px;font-weight: 40">Setting</el-button>
+          </el-button-group>
+        </div>
+
       </div>
 
-    </div>
 
-
-    <div class="container-fluid">
-      <div class="row mt-3 ml-2" style="font-weight: 600;font-size: 24px;font-family: 'PingFang SC';font-style: normal;color: #1D2129">
-        Requirements
-      </div>
-      <div class=" mt-3 ml-1 pl-3 pt-3 pb-4 card shadow border-0" style="height: 50px;background-color: rgba(255,255,255,0.5);border-radius: 5px;">
+      <div class="container-fluid">
+        <div class="row mt-3 ml-2" style="font-weight: 600;font-size: 24px;font-family: 'PingFang SC';font-style: normal;color: #1D2129">
+          Requirements
+        </div>
+        <div class=" mt-3 ml-1 pl-3 pt-3 pb-4 card shadow border-0" style="height: 50px;background-color: rgba(255,255,255,0.5);border-radius: 5px;">
           <div class="" style="font-family: 'PingFang SC';font-style: normal;font-weight: 400;font-size:14px;color: #1D2129; ">
             <el-checkbox v-model="checked" @change="this.setProjectSecret"></el-checkbox> <span class="ml-1">Project Secret Required</span>
           </div>
+        </div>
+        <div class="row mt-3 ml-2" style="font-weight: 600;font-size: 24px;font-family: 'PingFang SC';font-style: normal;color: #1D2129">
+          Requests Settings
+        </div>
+        <div class=" mt-3 ml-1 pt-1 pb-1 card shadow border-0" style="height: 152px;background-color: rgba(255,255,255,0.5);box-shadow: 0px 5px 30px rgba(77, 86, 225, 0.0);border-radius: 5px;">
+          <div class=""   style="height:76px;display: flex;align-items: center;">
+            <div class="" style="display: inline-block;width: 2%;text-align: center;">
+
+            </div>
+            <div class="" style="display: inline-block;width: 24%;text-align: left;font-style: normal;font-weight: 400;font-size: 16px;color: #86909C; ">
+              Per Second Requests Rate-limiting
+            </div>
+            <div class="" style="display: inline-block;width: 30%;">
+              <el-input type="number" v-model.number="inputPerSecond"  min="0" max="100" placeholder="0-100" clearable />
+            </div>
+            <div class="ml-2" style="display: inline-block;width: 44%;">
+              <el-button @click.prevent=" setProjectLimitPerSecond(this.projectId)" style="background-color:#4D56E1;color: white ;width: 100px">Save</el-button>
+            </div>
+          </div>
+          <div class=""   style="height:76px;display: flex;align-items: center;">
+            <div class="" style="display: inline-block;width: 2%;text-align: center;">
+
+            </div>
+            <div class="" style="display: inline-block;width: 24%;text-align: left;font-style: normal;font-weight: 400;font-size: 16px;color: #86909C; ">
+              Per Day Total Requests
+            </div>
+            <div class="" style="display: inline-block;width: 30%;">
+              <el-input type="number" v-model.number="inputPerDay" min="0" max="5000"  placeholder="0-5000" clearable />
+            </div>
+            <div class="ml-2" style="display: inline-block;width: 44%;">
+              <el-button  @click.prevent=" setProjectLimitPerday(this.projectId)" style="background-color:#4D56E1;color: white ;width: 100px">Save</el-button>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-3 ml-2" style="font-weight: 600;font-size: 24px;font-family: 'PingFang SC';font-style: normal;color: #1D2129">
+          Allowlists
+        </div>
+        <div class=" mt-3 ml-1 pl-4 pt-3 pb-3 card shadow border-0" style="background-color: rgba(255,255,255,0.5);box-shadow: 0px 5px 30px rgba(77, 86, 225, 0.0);border-radius: 5px;">
+          <el-radio-group v-model="showRecord" style="margin-bottom: 10px" fill="#4D56E1">
+            <el-radio-button label="contract"  >Contract Address</el-radio-button>
+            <el-radio-button label="origin"  >Origins</el-radio-button>
+            <el-radio-button label="apiRequest"  >Api Request Method</el-radio-button>
+          </el-radio-group>
+          <div v-if="this.showRecord==='apiRequest'" class="mt-2 mb-2"   style="display: flex;align-items: center;">
+            <div  class="" style="display: inline-block;width: 56%;">
+              <el-select
+                  v-model="value1"
+                  placeholder="Select"
+                  style="width: 100%"
+              >
+                <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                />
+              </el-select>
+            </div>
+            <div class="ml-2" style="display: inline-block;width: 44%;">
+              <el-button @click.prevent="addApiRequest(this.projectId,this.value1)" style="background-color:#4D56E1;color: white ;width: 100px">Add</el-button>
+            </div>
+          </div>
+          <div v-if="this.showRecord==='contract'" class="mt-2 mb-2"   style="display: flex;align-items: center;">
+            <div class="" style="display: inline-block;width: 56%;">
+              <el-input v-model="inputContract" placeholder="eg: 0xcd10d9f697230b04d9ebb8594a1ffe18fa95d9ad"  maxlength="42"  show-word-limit  clearable />
+            </div>
+            <div class="ml-2" style="display: inline-block;width: 44%;">
+              <el-button @click.prevent="addProjectContract(this.projectId)" style="background-color:#4D56E1;color: white ;width: 100px">Add</el-button>
+            </div>
+          </div>
+          <div v-if="this.showRecord==='origin'" class="mt-2 mb-2"   style="display: flex;align-items: center;">
+            <div class="" style="display: inline-block;width: 56%;">
+              <el-input v-model="inputOrigin" placeholder="eg: 127.0.0.1" clearable />
+            </div>
+            <div class="ml-2" style="display: inline-block;width: 44%;">
+              <el-button @click.prevent="addProjectOrigin(this.projectId)" style="background-color:#4D56E1;color: white ;width: 100px">Add</el-button>
+            </div>
+          </div>
+          <div v-if="this.showRecord==='contract'">
+            <div class="" v-for="(param, ind) in allowContract"
+                 :key="ind" style="display: flex;align-items: center;">
+              <div class="" style="display: inline-block; font-family: 'PingFang SC';font-style: normal;font-weight: 400;font-size: 14px;color:#4E5969 " >
+                {{ param }}
+              </div>
+              <div class="ml-4" style="display: inline-block;">
+                <el-button @click.prevent="deleteProjectContract(this.projectId,param)" type="text" style="font-family: 'PingFang SC';font-style: normal;font-weight: 400;font-size: 14px;color:#4D56E1 ">Remove </el-button>
+              </div>
+
+            </div>
+          </div>
+          <div v-if="this.showRecord==='origin'">
+            <div class="" v-for="(param, ind) in origins"
+                 :key="ind" style="display: flex;align-items: center;">
+              <div class="" style="display: inline-block; font-family: 'PingFang SC';font-style: normal;font-weight: 400;font-size: 14px;color:#4E5969 " >
+                {{ param }}
+              </div>
+              <div class="ml-4" style="display: inline-block;">
+                <el-button @click.prevent="deleteProjectOrigin(this.projectId,param)" type="text" style="font-family: 'PingFang SC';font-style: normal;font-weight: 400;font-size: 14px;color:#4D56E1 ">Remove </el-button>
+              </div>
+
+            </div>
+
+          </div>
+          <div v-if="this.showRecord==='apiRequest'">
+            <div class=" " v-for="(param, ind) in apiRequest"
+                 :key="ind" style="display: flex;align-items: center;">
+              <div class="" style="display: inline-block; font-family: 'PingFang SC';font-style: normal;font-weight: 400;font-size: 14px;color:#4E5969 " >
+                {{ param }}
+              </div>
+              <div class="ml-4" style="display: inline-block;">
+                <el-button @click.prevent="deleteProjectApiMethod(this.projectId,param)" type="text" style="font-family: 'PingFang SC';font-style: normal;font-weight: 400;font-size: 14px;color:#4D56E1 ">Remove </el-button>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
       </div>
-      <div class="row mt-3 ml-2" style="font-weight: 600;font-size: 24px;font-family: 'PingFang SC';font-style: normal;color: #1D2129">
-        Requests Settings
-      </div>
-      <div class=" mt-3 ml-1 pt-1 pb-1 card shadow border-0" style="height: 152px;background-color: rgba(255,255,255,0.5);box-shadow: 0px 5px 30px rgba(77, 86, 225, 0.0);border-radius: 5px;">
-        <div class=""   style="height:76px;display: flex;align-items: center;">
-          <div class="" style="display: inline-block;width: 2%;text-align: center;">
-
-          </div>
-          <div class="" style="display: inline-block;width: 24%;text-align: left;font-style: normal;font-weight: 400;font-size: 16px;color: #86909C; ">
-            Per Second Requests Rate-limiting
-          </div>
-          <div class="" style="display: inline-block;width: 30%;">
-            <el-input type="number" v-model.number="inputPerSecond"  min="0" max="100" placeholder="0-100" clearable />
-          </div>
-          <div class="ml-2" style="display: inline-block;width: 44%;">
-            <el-button @click.prevent=" setProjectLimitPerSecond(this.projectId)" style="background-color:#4D56E1;color: white ;width: 100px">Save</el-button>
-          </div>
-        </div>
-        <div class=""   style="height:76px;display: flex;align-items: center;">
-          <div class="" style="display: inline-block;width: 2%;text-align: center;">
-
-          </div>
-          <div class="" style="display: inline-block;width: 24%;text-align: left;font-style: normal;font-weight: 400;font-size: 16px;color: #86909C; ">
-            Per Day Total Requests
-          </div>
-          <div class="" style="display: inline-block;width: 30%;">
-            <el-input type="number" v-model.number="inputPerDay" min="0" max="5000"  placeholder="0-5000" clearable />
-          </div>
-          <div class="ml-2" style="display: inline-block;width: 44%;">
-            <el-button  @click.prevent=" setProjectLimitPerday(this.projectId)" style="background-color:#4D56E1;color: white ;width: 100px">Save</el-button>
-          </div>
-        </div>
-      </div>
-
-      <div class="row mt-3 ml-2" style="font-weight: 600;font-size: 24px;font-family: 'PingFang SC';font-style: normal;color: #1D2129">
-        Allowlists
-      </div>
-      <div class=" mt-3 ml-1 pl-4 pt-3 pb-3 card shadow border-0" style="background-color: rgba(255,255,255,0.5);box-shadow: 0px 5px 30px rgba(77, 86, 225, 0.0);border-radius: 5px;">
-        <el-radio-group v-model="showRecord" style="margin-bottom: 10px" fill="#4D56E1">
-          <el-radio-button label="contract"  >Contract Address</el-radio-button>
-          <el-radio-button label="origin"  >Origins</el-radio-button>
-          <el-radio-button label="apiRequest"  >Api Request Method</el-radio-button>
-        </el-radio-group>
-        <div v-if="this.showRecord==='apiRequest'" class="mt-2 mb-2"   style="display: flex;align-items: center;">
-          <div  class="" style="display: inline-block;width: 56%;">
-            <el-select
-                v-model="value1"
-                placeholder="Select"
-                style="width: 100%"
-            >
-              <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-              />
-            </el-select>
-          </div>
-          <div class="ml-2" style="display: inline-block;width: 44%;">
-            <el-button @click.prevent="addApiRequest(this.projectId,this.value1)" style="background-color:#4D56E1;color: white ;width: 100px">Add</el-button>
-          </div>
-        </div>
-        <div v-if="this.showRecord==='contract'" class="mt-2 mb-2"   style="display: flex;align-items: center;">
-          <div class="" style="display: inline-block;width: 56%;">
-            <el-input v-model="inputContract" placeholder="eg: 0xcd10d9f697230b04d9ebb8594a1ffe18fa95d9ad"  maxlength="42"  show-word-limit  clearable />
-          </div>
-          <div class="ml-2" style="display: inline-block;width: 44%;">
-            <el-button @click.prevent="addProjectContract(this.projectId)" style="background-color:#4D56E1;color: white ;width: 100px">Add</el-button>
-          </div>
-        </div>
-        <div v-if="this.showRecord==='origin'" class="mt-2 mb-2"   style="display: flex;align-items: center;">
-          <div class="" style="display: inline-block;width: 56%;">
-            <el-input v-model="inputOrigin" placeholder="eg: 127.0.0.1" clearable />
-          </div>
-          <div class="ml-2" style="display: inline-block;width: 44%;">
-            <el-button @click.prevent="addProjectOrigin(this.projectId)" style="background-color:#4D56E1;color: white ;width: 100px">Add</el-button>
-          </div>
-        </div>
-        <div v-if="this.showRecord==='contract'">
-          <div class="" v-for="(param, ind) in allowContract"
-               :key="ind" style="display: flex;align-items: center;">
-            <div class="" style="display: inline-block; font-family: 'PingFang SC';font-style: normal;font-weight: 400;font-size: 14px;color:#4E5969 " >
-              {{ param }}
-            </div>
-            <div class="ml-4" style="display: inline-block;">
-              <el-button @click.prevent="deleteProjectContract(this.projectId,param)" type="text" style="font-family: 'PingFang SC';font-style: normal;font-weight: 400;font-size: 14px;color:#4D56E1 ">Remove </el-button>
-            </div>
-
-          </div>
-        </div>
-        <div v-if="this.showRecord==='origin'">
-          <div class="" v-for="(param, ind) in origins"
-               :key="ind" style="display: flex;align-items: center;">
-            <div class="" style="display: inline-block; font-family: 'PingFang SC';font-style: normal;font-weight: 400;font-size: 14px;color:#4E5969 " >
-              {{ param }}
-            </div>
-            <div class="ml-4" style="display: inline-block;">
-              <el-button @click.prevent="deleteProjectOrigin(this.projectId,param)" type="text" style="font-family: 'PingFang SC';font-style: normal;font-weight: 400;font-size: 14px;color:#4D56E1 ">Remove </el-button>
-            </div>
-
-          </div>
-
-        </div>
-        <div v-if="this.showRecord==='apiRequest'">
-          <div class=" " v-for="(param, ind) in apiRequest"
-               :key="ind" style="display: flex;align-items: center;">
-            <div class="" style="display: inline-block; font-family: 'PingFang SC';font-style: normal;font-weight: 400;font-size: 14px;color:#4E5969 " >
-              {{ param }}
-            </div>
-            <div class="ml-4" style="display: inline-block;">
-              <el-button @click.prevent="deleteProjectApiMethod(this.projectId,param)" type="text" style="font-family: 'PingFang SC';font-style: normal;font-weight: 400;font-size: 14px;color:#4D56E1 ">Remove </el-button>
-            </div>
-
-          </div>
-
-        </div>
-      </div>
-
     </div>
+
   </div>
 </template>
 <script>
@@ -254,6 +257,7 @@ export default {
       allowContract:[],
       login:true,
       isHashPattern: /^((0x)?)([0-9a-f]{40})$/,
+      loading:true,
     };
   },
   created() {
@@ -307,7 +311,7 @@ export default {
     setProjectSecret() {
         axios({
           method: "patch",
-          url: "http://127.0.0.1:3000/project/enableProjectSecret",
+          url: "/api/project/enableProjectSecret",
           headers: {
             "Content-Type": "application/json",
             withCredentials: " true",
@@ -358,7 +362,7 @@ export default {
     getProjectInfo(email) {
       axios({
         method: "patch",
-        url: "http://127.0.0.1:3000/project/list",
+        url: "/api/project/list",
         headers: {
           "Content-Type": "application/json",
           withCredentials: " true",
@@ -397,7 +401,7 @@ export default {
     getProjectInfoByProjectId(apiKey) {
       axios({
         method: "patch",
-        url: "http://127.0.0.1:3000/project/listByProjectId",
+        url: "/api/project/listByProjectId",
         headers: {
           "Content-Type": "application/json",
           withCredentials: " true",
@@ -420,6 +424,7 @@ export default {
           this.allowContract = res['data']['data']['contractAddress']
           this.origins = res['data']['data']['origin']
           this.apiRequest = res['data']['data']['apiRequest']
+          this.loading = false;
           console.log(this.projectInfo)
 
         }
@@ -430,6 +435,7 @@ export default {
             type: 'error',
             message: 'no no no no no ',
           })
+          this.loading = false
           console.log("oh no")
           this.$router.push({
             path: `login`,
@@ -437,9 +443,11 @@ export default {
           });
         } else if (error.request) {
           console.log(error.request);
+          this.loading = false
           this.success = false
         } else {
           console.log('Error', error.message);
+          this.loading = false
         }
       })
     },
@@ -454,7 +462,7 @@ export default {
       }
       axios({
         method: "patch",
-        url: "http://127.0.0.1:3000/project/limitPerday",
+        url: "/api/project/limitPerday",
         headers: {
           "Content-Type": "application/json",
           withCredentials: " true",
@@ -491,7 +499,7 @@ export default {
       }
       axios({
         method: "patch",
-        url: "http://127.0.0.1:3000/project/limitPerSecond",
+        url: "/api/project/limitPerSecond",
         headers: {
           "Content-Type": "application/json",
           withCredentials: " true",
@@ -528,7 +536,7 @@ export default {
       }
       axios({
         method: "patch",
-        url: "http://127.0.0.1:3000/project/allowContract",
+        url: "/api/project/allowContract",
         headers: {
           "Content-Type": "application/json",
           withCredentials: " true",
@@ -565,7 +573,7 @@ export default {
     addApiRequest(apiKey,apiRequest){
       axios({
         method: "patch",
-        url: "http://127.0.0.1:3000/project/apiMethod",
+        url: "/api/project/apiMethod",
         headers: {
           "Content-Type": "application/json",
           withCredentials: " true",
@@ -602,7 +610,7 @@ export default {
     addProjectOrigin(apiKey){
       axios({
         method: "patch",
-        url: "http://127.0.0.1:3000/project/projectOrigin",
+        url: "/api/project/projectOrigin",
         headers: {
           "Content-Type": "application/json",
           withCredentials: " true",
@@ -639,7 +647,7 @@ export default {
     deleteProjectContract(apiKey,contract){
       axios({
         method: "patch",
-        url: "http://127.0.0.1:3000/project/deleteAllowContract",
+        url: "/api/project/deleteAllowContract",
         headers: {
           "Content-Type": "application/json",
           withCredentials: " true",
@@ -676,7 +684,7 @@ export default {
     deleteProjectOrigin(apiKey,origin){
       axios({
         method: "patch",
-        url: "http://127.0.0.1:3000/project/deleteProjectOrigin",
+        url: "/api/project/deleteProjectOrigin",
         headers: {
           "Content-Type": "application/json",
           withCredentials: " true",
@@ -713,7 +721,7 @@ export default {
     deleteProjectApiMethod(apiKey,apiMethod){
       axios({
         method: "patch",
-        url: "http://127.0.0.1:3000/project/deleteApiMethod",
+        url: "/api/project/deleteApiMethod",
         headers: {
           "Content-Type": "application/json",
           withCredentials: " true",
