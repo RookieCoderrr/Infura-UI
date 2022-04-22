@@ -88,7 +88,7 @@ export default {
       this.loading = true
       axios({
         method: "post",
-        url: "http://127.0.0.1:3000/auth/email/register",
+        url: "/api/auth/email/register",
         data: {
           email: email,
           password: password,

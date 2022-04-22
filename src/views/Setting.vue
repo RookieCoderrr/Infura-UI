@@ -50,7 +50,7 @@
               Per Second Requests Rate-limiting
             </div>
             <div class="" style="display: inline-block;width: 30%;">
-              <el-input type="number" v-model.number="inputPerSecond"  min="0" max="100" placeholder="0-100" clearable />
+              <el-input type="number"  ref="second" v-model.number="inputPerSecond"  min="0" max="100" placeholder="0-100" clearable />
             </div>
             <div class="ml-2" style="display: inline-block;width: 44%;">
               <el-button @click.prevent=" setProjectLimitPerSecond(this.projectId)" style="background-color:#4D56E1;color: white ;width: 100px">Save</el-button>
@@ -64,7 +64,7 @@
               Per Day Total Requests
             </div>
             <div class="" style="display: inline-block;width: 30%;">
-              <el-input type="number" v-model.number="inputPerDay" min="0" max="5000"  placeholder="0-5000" clearable />
+              <el-input type="number"  ref="day" v-model.number="inputPerDay" min="0" max="5000"  placeholder="0-5000" clearable />
             </div>
             <div class="ml-2" style="display: inline-block;width: 44%;">
               <el-button  @click.prevent=" setProjectLimitPerday(this.projectId)" style="background-color:#4D56E1;color: white ;width: 100px">Save</el-button>
@@ -452,6 +452,15 @@ export default {
       })
     },
     setProjectLimitPerday(apiKey){
+      if(this.inputPerDay === ''){
+        this.$refs.day.focus();
+        ElMessage({
+          showClose: true,
+          type: 'error',
+          message: 'Please input valid value ',
+        })
+        return
+      }
       if (this.inputPerDay < 0 || this.inputPerDay > 5000) {
         ElMessage({
           showClose: true,
@@ -489,6 +498,15 @@ export default {
 
     },
     setProjectLimitPerSecond(apiKey){
+      if(this.inputPerSecond === ''){
+        this.$refs.second.focus();
+        ElMessage({
+          showClose: true,
+          type: 'error',
+          message: 'Please input valid value ',
+        })
+        return
+      }
       if (this.inputPerSecond < 0 || this.inputPerSecond > 100) {
         ElMessage({
           showClose: true,
@@ -571,6 +589,14 @@ export default {
 
     },
     addApiRequest(apiKey,apiRequest){
+      if(this.value1 === ''){
+        ElMessage({
+          showClose: true,
+          type: 'error',
+          message: 'Please input valid value ',
+        })
+        return
+      }
       axios({
         method: "patch",
         url: "/api/project/apiMethod",
@@ -608,6 +634,14 @@ export default {
 
     },
     addProjectOrigin(apiKey){
+      if(this.inputOrigin === ''){
+        ElMessage({
+          showClose: true,
+          type: 'error',
+          message: 'Please input valid value ',
+        })
+        return
+      }
       axios({
         method: "patch",
         url: "/api/project/projectOrigin",

@@ -15,10 +15,9 @@
       <div class="row mt-3" style="font-weight: 600;font-size: 24px;font-family: 'PingFang SC';font-style: normal;color: #1D2129">
         <div class="col-3"  style=" " >
           My Project
-          <img src="@/assets/addButton.png" @click.prevent="dialogFormVisible = true" style="height:30px;cursor: pointer">
-
+          <img src="@/assets/addButton.png" @click.prevent="dialogFormVisible = true" style="height:25px;cursor: pointer">
           <el-dialog v-model="dialogFormVisible" title="Project Name" width="30%">
-                <el-input v-model="projectName" maxlength="10"  show-word-limit autocomplete="off" />
+                <el-input v-model.trim="projectName" maxlength="10"  show-word-limit autocomplete="off" />
             <template #footer>
       <span class="dialog-footer">
         <el-button @click="dialogFormVisible = false">Cancel</el-button>
@@ -36,7 +35,7 @@
           <div class="card shadow border-0"  >
            <div class="row" style="height: 100px">
              <div class="col-3"  @click.prevent="toDashBoard(item['apikey'],'mainnet')" style="cursor: pointer">
-                <div style="font-family: NucleoIcons;font-style: normal;font-weight: 600;font-size: 26px;height: 60px;display: flex;align-items: center; text-align: left;color:#1D2129 ">
+                <div style="font-family: NucleoIcons;font-style: normal;font-weight: 500;font-size: 26px;height: 60px;display: flex;align-items: center; text-align: left;color:#1D2129 ">
                   <span class="ml-5">{{ item['name'] }}</span>
                 </div>
                <div style="font-family: NucleoIcons; font-style: normal;font-weight: 400;font-size: 14px;display: flex;align-items: center; text-align: left;color: #4E5969;">
@@ -172,6 +171,14 @@ export default {
       })
     },
     createProject(projectName){
+      if (projectName === "") {
+        ElMessage({
+          showClose: true,
+          type: 'error',
+          message: 'Project Name cannot be empty',
+        })
+        return
+      }
       axios({
         method: "patch",
         url: "/api/project/create",

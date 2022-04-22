@@ -121,7 +121,7 @@ export default {
       projectList:[
       ],
       netValue:this.$route.params.net,
-      start:new Date().getTime() - 7*86400000,
+      start:new Date(new Date().setHours(0,0,0,0)+24 * 60 * 60 *1000 -1).getTime() - 7*86400000,
       end: new Date().getTime(),
       refresh:true,
       date:[],
@@ -129,6 +129,8 @@ export default {
     };
   },
   created() {
+    console.log(this.start)
+    console.log(this.end)
     localStorage.setItem("net",this.$route.params.net )
     localStorage.setItem("apikey",this.$route.params.projectId )
     this.testLogin()
