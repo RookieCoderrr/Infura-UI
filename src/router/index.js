@@ -20,7 +20,6 @@ import Account from "@/views/account";
 import Bill from "@/views/bill";
 import Logout from "@/views/logout";
 import Plan from "@/views/plan"
-import ConnectSocial from "@/views/ConnectSocial";
 
 const routes = [
   {
@@ -67,11 +66,6 @@ const routes = [
         path: "/verifyEmailSuccess/:token",
         name: "verifyEmailSuccess",
         components: { default: VerifyEmailSuccess },
-      },
-      {
-        path: "/connectSocial",
-        name: "connectSocial",
-        components: { default: ConnectSocial },
       },
     ],
   },
