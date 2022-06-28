@@ -116,6 +116,10 @@ export default {
         {
           value:'testnet',
           label:'Testnet',
+        },
+        {
+          value:'testmagnet',
+          label:'Testmagnet',
         }
       ],
       projectList:[

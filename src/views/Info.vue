@@ -44,7 +44,7 @@
         <div class="row mt-3 ml-2" style="font-weight: 600;font-size: 24px;font-family: 'PingFang SC';font-style: normal;color: #1D2129">
           *Keys
         </div>
-        <div class=" mt-3 ml-1 pt-3 pb-3 card shadow border-0" style="height: 176px;background-color: rgba(255,255,255,0.5);box-shadow: 0px 5px 30px rgba(77, 86, 225, 0.0);border-radius: 5px;">
+        <div class=" mt-3 ml-1 pt-3 pb-3 card shadow border-0" style="height: 224px;background-color: rgba(255,255,255,0.5);box-shadow: 0px 5px 30px rgba(77, 86, 225, 0.0);border-radius: 5px;">
           <div class="" style="height:44px;display: flex;align-items: center">
             <div class="" style="display: inline-block;width: 2%;text-align: center;">
 
@@ -75,7 +75,7 @@
               Endpoints
             </div>
             <div class="" style="display: inline-block;width: 83%;font-size: 16px;font-weight: 400;font-family: 'PingFang SC';color: #1D2129">
-             Mainnet: http://20.25.70.212:1926/projectId/{{ projectInfo['apikey'] }}
+             Mainnet: https://mainnet.n3magnet.xyz/projectId/{{ projectInfo['apikey'] }}
               <span class="ml-1"><i @click="doCopy(this.mainnetUrl)" class="el-icon-copy-document" style="cursor: pointer"/></span>
             </div>
           </div>
@@ -86,8 +86,19 @@
 
             </div>
             <div class="" style="display: inline-block;width: 83%;font-size: 16px;font-weight: 400;font-family: 'PingFang SC';color: #1D2129">
-              Testnet: http://20.25.70.212:1927/projectId/{{ projectInfo['apikey'] }}
+              Testnet: https://n3t4.n3magnet.xyz/projectId/{{ projectInfo['apikey'] }}
               <span class="ml-1"><i @click="doCopy(this.testnetUrl)" class="el-icon-copy-document" style="cursor: pointer"/></span>
+            </div>
+          </div>
+          <div class="" style="height:44px;display: flex;align-items: center">
+            <div class="" style="display: inline-block;width: 2%;text-align: center;">
+            </div>
+            <div class="" style="display: inline-block;width: 15%;text-align: center;font-style: normal;font-weight: 500;font-size: 16px;color: #86909C;">
+
+            </div>
+            <div class="" style="display: inline-block;width: 83%;font-size: 16px;font-weight: 400;font-family: 'PingFang SC';color: #1D2129">
+              Testmagnet: https://n3t5.n3magnet.xyz/projectId/{{ projectInfo['apikey'] }}
+              <span class="ml-1"><i @click="doCopy(this.testmagnetUrl)" class="el-icon-copy-document" style="cursor: pointer"/></span>
             </div>
           </div>
         </div>
@@ -143,6 +154,7 @@ export default {
       secret:'',
       mainnetUrl:'',
       testnetUrl:'',
+      testmagnetUrl:'',
 
     };
   },
@@ -268,8 +280,9 @@ export default {
           this.input = res['data']['data']['name']
           this.value = res['data']['data']['name']
           this.secret = res['data']['data']['apisecret']
-          this.mainnetUrl = "http://20.25.70.212:1926/projectId/"+this.projectId
-          this.testnetUrl = "http://20.25.70.212:1927/projectId/"+this.projectId
+          this.mainnetUrl = "https://mainnet.n3magnet.xyz/projectId/"+this.projectId
+          this.testnetUrl = "https://n3t5.n3magnet.xyz/projectId/"+this.projectId
+          this.testmagnetUrl = "https://n3t5.n3magnet.xyz/projectId/"+this.projectId
           this.loading = false;
           console.log(this.projectInfo)
 

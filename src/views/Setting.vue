@@ -599,7 +599,7 @@ export default {
       }
       axios({
         method: "patch",
-        url: "/api/project/apiMethod",
+        url: "/api/project/method",
         headers: {
           "Content-Type": "application/json",
           withCredentials: " true",
